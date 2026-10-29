@@ -1,0 +1,57 @@
+[
+  {
+    "id": "buzzer-wire-game",
+    "week": 1,
+    "title": "لعبة سلك الإنذار والتركيز مع أردوينو والجرس",
+    "titleEn": "Buzz Wire Steady Hand Game with Arduino",
+    "summary": "صنع لعبة تحدي التركيز الشهيرة؛ سلك معدني متعرج وحلقة يمررها الطفل بحذر، فإذا لامست السلك يطلق الأردوينو صفارة الإنذار ويومض ضوء التنبيه ويسجل لمسات الخطأ!",
+    "status": "completed",
+    "statusLabel": "الأسبوع الماضي (مكتمل) ✅",
+    "duration": "45 دقيقة",
+    "level": "مبتدئ وممتع ⭐",
+    "category": "الألعاب التفاعلية والدوائر",
+    "image": "assets/images/buzz_wire_infographic.jpg",
+    "url": "projects/buzzer-wire-game/index.html",
+    "components": [
+      "Arduino Uno",
+      "Buzzer (جرس طنان)",
+      "LED أحمر وLED أخضر",
+      "سلك نحاسي متعرج وحلقة",
+      "مقاومات 220Ω"
+    ],
+    "learningGoals": [
+      "فهم مفهوم الدائرة الكهربائية المفتوحة والمغلقة",
+      "استخدام خاصية المقاومة الداخلية INPUT_PULLUP",
+      "برمجة الترددات الصوتية باستخدام دالة tone()",
+      "حساب عدد الأخطاء وبناء لعبة تفاعلية ميكانيكية"
+    ]
+  },
+  {
+    "id": "rfid-smart-door",
+    "week": 2,
+    "title": "المنزل الذكي: الباب الأوتوماتيكي بتقنية RFID",
+    "titleEn": "Smart Home RFID Automatic Door",
+    "summary": "بناء منزل كرتوني ذكي بباب أوتوماتيكي ومحرك سيرفو يفتح بالبطاقة المبرمجة فقط مع شاشة تفاعلية وتغذية آمنة 3.3V ومحاكاة حية كاملة.",
+    "status": "active",
+    "statusLabel": "الأسبوع الحالي (نشط) 🟢",
+    "duration": "45-60 دقيقة",
+    "level": "مبتدئ متدرج ⭐⭐",
+    "category": "الأنظمة الذكية والمحركات",
+    "image": "assets/images/project_cardboard_house_3.jpg",
+    "url": "projects/rfid-smart-door/index.html",
+    "components": [
+      "Arduino Uno",
+      "RC522 RFID",
+      "SG90 Servo",
+      "Breadboard",
+      "Cardboard",
+      "Buzzer (جرس إنذار)"
+    ],
+    "learningGoals": [
+      "فهم دور المتحكم الدقيق وعضلات محرك السيرفو",
+      "قراءة معرّف البطاقة اللاسلكي السري (UID)",
+      "استخدام الشروط المنطقية if/else في اتخاذ القرارات",
+      "بناء نموذج ميكانيكي متزن من خامات الكرتون"
+    ]
+  }
+]

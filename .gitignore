@@ -1,0 +1,17 @@
+# Operating System files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+.DS_Store
+
+# Python cache & temp
+__pycache__/
+*.py[cod]
+*$py.class
+scratch/
+scratch_*.py
+
+# Editor folders
+.vscode/
+.idea/

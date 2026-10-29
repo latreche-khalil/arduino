@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="منصة ورشات الأستاذ خليل للأردوينو والابتكار للأطفال - منهج عملي أسبوعي متجدد للمخترعين الصغار">
+  <meta name="keywords" content="أردوينو, Arduino, تعليم البرمجة للأطفال, الأستاذ خليل, مشاريع إلكترونية, ورشات أسبوعية">
+  <meta name="author" content="الأستاذ خليل">
+  <title>بوابة ورشات الأستاذ خليل | أكاديمية الأردوينو والابتكار للأطفال</title>
+
+  <!-- ورقة الأنماط الرئيسية وأنماط البوابة المنهجية -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/portal.css">
+</head>
+<body>
+
+  <!-- شريط التنقل الرئيسي للبوابة -->
+  <header class="header-nav">
+    <div class="container nav-content">
+      <a href="index.html" class="nav-brand">
+        <div class="brand-icon">🏫</div>
+        <div class="brand-text">
+          <h1>منصة ورشات الأستاذ خليل</h1>
+          <span>أكاديمية الأردوينو والابتكار للأطفال</span>
+        </div>
+      </a>
+
+      <nav class="nav-links">
+        <a href="#curriculum" class="active">المشاريع الأسبوعية</a>
+        <a href="projects/buzzer-wire-game/index.html">الأسبوع 1: سلك الإنذار ⚡</a>
+        <a href="projects/rfid-smart-door/index.html">الأسبوع 2: المنزل الذكي 🏠</a>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="#curriculum" class="btn btn-sm btn-primary">
+          🚀 <span>استكشف المشاريع</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ====================================================================
+         بطل البوابة (PORTAL HERO)
+         ==================================================================== -->
+    <section class="portal-hero">
+      <div class="container">
+        <div class="portal-tag">
+          🚀 <span>منهج عملي تفاعلي متجدد أسبوعياً</span>
+        </div>
+
+        <h1>
+          اصنع اختراعك الإلكتروني الجديد <br>
+          <span style="color:var(--color-primary);">مع الأستاذ خليل</span> خطوة بخطوة!
+        </h1>
+
+        <p>
+          مرحباً بكم في الأكاديمية! هنا نلتقي كل أسبوع مع <strong>مشروع أردوينو جديد</strong>؛ نفهم فكرته العلمية، نركب دائرته الحقيقية، نبرمج عقله، ونبني مجسمه بأيدينا ليتحول من مجرد فكرة إلى اختراع حقيقي يعمل في الواقع!
+        </p>
+
+        <!-- بطاقتا استعراض مشروعي الأسبوع الماضي وهذا الأسبوع -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; max-width: 980px; margin: 0 auto 2.5rem; text-align: right;">
+          <!-- الأسبوع 1: سلك الإنذار -->
+          <div style="background: white; border: 2px solid var(--border-subtle); border-radius: var(--radius-xl); padding: 1.75rem; box-shadow: var(--shadow-sm); display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+              <span class="badge badge-green" style="margin-bottom: 0.6rem;">الأسبوع الماضي (مكتمل) ✅</span>
+              <h3 style="font-size: 1.35rem; font-weight: 900; color: var(--text-primary); margin-bottom: 0.4rem;">
+                ⚡ لعبة سلك الإنذار والتركيز (Buzzer Wire)
+              </h3>
+              <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 1.25rem;">
+                تحدي ثبات اليد الكلاسيكي مع صفارة الإنذار وأضواء LED وبرمجة المقاومة الداخلية INPUT_PULLUP.
+              </p>
+            </div>
+            <div>
+              <a href="projects/buzzer-wire-game/index.html" class="btn btn-secondary" style="width: 100%;">
+                <span>مراجعة ورشة سلك الإنذار</span> 🎮
+              </a>
+            </div>
+          </div>
+
+          <!-- الأسبوع 2: المنزل الذكي -->
+          <div style="background: linear-gradient(135deg, #eff6ff, #dbeafe); border: 2px solid var(--color-primary); border-radius: var(--radius-xl); padding: 1.75rem; box-shadow: var(--shadow-md); display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+              <span class="badge badge-blue" style="margin-bottom: 0.6rem;">مشروع هذا الأسبوع (نشط) 🟢</span>
+              <h3 style="font-size: 1.35rem; font-weight: 900; color: var(--text-primary); margin-bottom: 0.4rem;">
+                🏠 المنزل الذكي: الباب الأوتوماتيكي بـ RFID
+              </h3>
+              <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 1.25rem;">
+                بناء منزل كرتوني بباب أوتوماتيكي ومحرك سيرفو يفتح ببطاقة مشفرة، مع محاكاة حية وكود أردوينو كامل.
+              </p>
+            </div>
+            <div>
+              <a href="projects/rfid-smart-door/index.html" class="btn btn-primary" style="width: 100%;">
+                <span>ادخل إلى ورشة هذا الأسبوع</span> 🚀
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- إحصائيات المنهج السريعة -->
+        <div class="portal-stats-row">
+          <div class="portal-stat-item">
+            <div class="portal-stat-icon">🗓️</div>
+            <div class="portal-stat-info">
+              <h5 id="statTotalProjects">4 مشاريع</h5>
+              <p>جدول المنهج الأسبوعي</p>
+            </div>
+          </div>
+          <div class="portal-stat-item">
+            <div class="portal-stat-icon">🟢</div>
+            <div class="portal-stat-info">
+              <h5 id="statActiveProjects">1 متاح فوراً</h5>
+              <p>ورشة كاملة للطلاب</p>
+            </div>
+          </div>
+          <div class="portal-stat-item">
+            <div class="portal-stat-icon">🧠</div>
+            <div class="portal-stat-info">
+              <h5>تفكير هندسي</h5>
+              <p>تطبيق عملي 100%</p>
+            </div>
+          </div>
+          <div class="portal-stat-item">
+            <div class="portal-stat-icon">🎓</div>
+            <div class="portal-stat-info">
+              <h5>شهادات تميز</h5>
+              <p>لكل مخترع يجتاز الاختبار</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ====================================================================
+         شبكة مشاريع المنهج الأسبوعية (CURRICULUM PROJECTS)
+         ==================================================================== -->
+    <section class="section-wrapper" id="curriculum">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">📅 جدول الحصص الأسبوعية</span>
+          <h2 class="section-title">رحلة المهندس الصغير: مشروع جديد كل أسبوع</h2>
+          <p class="section-desc">
+            كل بطاقة تمثل حصة أسبوعية مستقلة ومتكاملة؛ يبدأ الأطفال بفهم النظام وتركيب الدائرة ثم برمجتها وصنع النموذج النهائي:
+          </p>
+        </div>
+
+        <!-- شريط التصفية والتحكم -->
+        <div class="portal-toolbar">
+          <div class="portal-filters-group">
+            <button class="btn-filter-portal active" data-filter="all">جميع المشاريع (2)</button>
+            <button class="btn-filter-portal" data-filter="active">مشروع هذا الأسبوع (المنزل الذكي) 🏠</button>
+            <button class="btn-filter-portal" data-filter="completed">مشروع الأسبوع الماضي (سلك الإنذار) ⚡</button>
+          </div>
+        </div>
+
+        <!-- الشبكة الديناميكية للمشاريع -->
+        <div class="projects-curriculum-grid" id="curriculumProjectsGrid">
+          <!-- يتم توليد البطاقات تلقائياً بواسطة js/portal.js -->
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  
+
+  <!-- التذييل العام للمنصة -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <h3>🏫 منصة ورشات الأستاذ خليل</h3>
+          <p>
+            منظومة تعليمية متكاملة مصممة لمساعدة الأستاذ والطلاب على تنظيم حصص أردوينو والابتكار الهندسي أسبوعًا بأسبوع وبناء جيل المخترعين والمبرمجين القادم.
+          </p>
+        </div>
+
+        <div class="footer-links">
+          <h4>مشاريع الورشات</h4>
+          <ul>
+            <li><a href="projects/buzzer-wire-game/index.html">الأسبوع 1: لعبة سلك الإنذار والتركيز ⚡</a></li>
+            <li><a href="projects/rfid-smart-door/index.html">الأسبوع 2: المنزل الذكي والباب الأوتوماتيكي 🏠</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-links">
+          <h4>عن الورشات والمنهج</h4>
+          <ul>
+            <li><a href="#curriculum">جدول الحصص الأسبوعية</a></li>
+            <li><a href="projects/rfid-smart-door/index.html">مشروع الأسبوع الحالي (المنزل الذكي) 🏠</a></li>
+            <li><a href="projects/buzzer-wire-game/index.html">مشروع الأسبوع السابق (سلك الإنذار) ⚡</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>جميع الحقوق محفوظة © ورشات الأستاذ خليل لتعليم الإلكترونيات والبرمجة للأطفال | صُمم المنهج بكل فخر وشغف تعليمي</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ملف جافاسكريبت البوابة -->
+  <script src="js/portal.js"></script>
+</body>
+</html>

@@ -1,0 +1,1887 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="الدليل التفاعلي الشامل لورشة المنزل الذكي: الباب الأوتوماتيكي بتقنية RFID ومحرك السيرفو مع أردوينو - إعداد وتقديم الأستاذ خليل">
+  <meta name="keywords" content="Arduino, RFID, RC522, SG90, Smart Home, تعليم البرمجة للأطفال, الأستاذ خليل, منزل ذكي">
+  <meta name="author" content="الأستاذ خليل - ورشة الابتكار الهندسي">
+  <title>اصنع منزلك الذكي! | Smart Home RFID Door - ورشة الأستاذ خليل</title>
+
+  <!-- ورقة الأنماط الرئيسية -->
+  <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+  <!-- شريط التنقل بين أسابيع ورشات الأستاذ خليل -->
+  <div class="curriculum-top-bar" style="background: #0f172a; color: #f8fafc; padding: 0.5rem 1rem; font-size: 0.85rem; border-bottom: 1px solid #1e293b;">
+    <div class="container" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+      <div style="display: flex; align-items: center; gap: 0.75rem;">
+        <a href="../../index.html" style="color: #38bdf8; text-decoration: none; font-weight: 800; display: inline-flex; align-items: center; gap: 0.35rem;">
+          🏠 <span>بوابة ورشات الأستاذ خليل</span>
+        </a>
+        <span style="color: #64748b;">/</span>
+        <span style="color: #fbbf24; font-weight: 700;">الأسبوع 2: المنزل الذكي (RFID) [الأسبوع الحالي] 🟢</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 0.5rem;">
+        <label for="projectSelectTop" style="color: #94a3b8; font-size: 0.8rem;">الانتقال لمشروع آخر:</label>
+        <select id="projectSelectTop" onchange="if(this.value) window.location.href=this.value;" style="background: #1e293b; color: white; border: 1px solid #334155; padding: 0.25rem 0.6rem; border-radius: 6px; font-family: inherit; font-size: 0.8rem; cursor: pointer;">
+          <option value="" selected>-- الأسبوع 2: المنزل الذكي (الحالي) 🟢 --</option>
+          <option value="../buzzer-wire-game/index.html">الأسبوع 1: لعبة سلك الإنذار ⚡ (الأسبوع الماضي)</option>
+          <option value="../../index.html">عرض جدول المنهج في البوابة 📚</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- شريط قراءة التقدم وقائمة التنقل الثابتة -->
+  <header class="header-nav">
+    <div class="reading-progress-bar" id="readingProgress"></div>
+    <div class="container nav-content">
+      <a href="#hero" class="nav-brand">
+        <div class="brand-icon">🏠</div>
+        <div class="brand-text">
+          <h1>المنزل الذكي — الباب الأوتوماتيكي</h1>
+          <span>ورشة الأستاذ خليل للابتكار</span>
+        </div>
+      </a>
+
+      <nav class="nav-links">
+        <a href="#hero">المقدمة</a>
+        <a href="#simulation">كيف يعمل؟</a>
+        <a href="#components">المكونات</a>
+        <a href="#safety">الأمان</a>
+        <a href="#wiring">التوصيلات</a>
+        <a href="#code">البرنامج</a>
+        <a href="#testing">الاختبار</a>
+        <a href="#troubleshooting">الأعطال</a>
+        <a href="#challenges">التحديات</a>
+        <a href="#teacher">نصائح الأستاذ</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="btn-print" onclick="window.print()" title="طباعة الدليل الورقي للحصة">
+          🖨️ <span>طباعة الدليل</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ====================================================================
+         القسم 1: البطل / مقدمة المشروع (HERO SECTION)
+         ==================================================================== -->
+    <section class="section-wrapper hero-section" id="hero">
+      <div class="container hero-grid">
+        <div class="hero-text-side">
+          <div class="hero-badge-wrap">
+            <span class="badge badge-blue">مشروع Arduino عملي للأبطال 🛠️</span>
+            <span class="badge badge-amber">إعداد الأستاذ خليل 👨‍🏫</span>
+          </div>
+
+          <h1 class="hero-title">
+            اصنع <span class="highlight">منزلك الذكي!</span>
+          </h1>
+          <div class="hero-subtitle-en">SMART HOME — RFID AUTOMATIC DOOR</div>
+
+          <p class="hero-lead">
+            اصنع منزلًا صغيرًا يفتح بابه تلقائيًا عند تمرير البطاقة الصحيحة!
+          </p>
+
+          <p class="hero-description">
+            تخيّل أنك بنيت منزلًا كرتونيًا لا يفتح إلا لك! في هذه الورشة الهندسية الممتعة، ستتعلم كيف يتعاون <strong>عقل أردوينو</strong> مع <strong>عين قارئ RFID اللاسلكية</strong> و<strong>عضلة محرك السيرفو</strong> لحل مشكلة واقعية بذكاء وأمان.
+          </p>
+
+          <div class="hero-cta-group">
+            <a href="#simulation" class="btn btn-primary">
+              <span>ابدأ التجربة الآن</span> 🚀
+            </a>
+            <a href="#components" class="btn btn-secondary">
+              <span>شاهد المكونات</span> 🔍
+            </a>
+          </div>
+
+          <div class="hero-highlights">
+            <div class="highlight-item">
+              <div class="highlight-icon">⏱️</div>
+              <div class="highlight-info">
+                <h4>45 - 60 دقيقة</h4>
+                <p>مدة الورشة العملية</p>
+              </div>
+            </div>
+            <div class="highlight-item">
+              <div class="highlight-icon">🎯</div>
+              <div class="highlight-info">
+                <h4>مبتدئ وممتع</h4>
+                <p>لا يشترط خبرة سابقة</p>
+              </div>
+            </div>
+            <div class="highlight-item">
+              <div class="highlight-icon">🧠</div>
+              <div class="highlight-info">
+                <h4>تفكير هندسي</h4>
+                <p>إلكترونيات + برمجة + ميكانيكا</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-media-side">
+          <div class="hero-image-card">
+            <span class="hero-floating-badge">نموذج الورشة الحقيقي 🏡</span>
+            <img 
+              src="../../assets/images/project_cardboard_house_3.jpg" 
+              alt="نموذج منزل ذكي من الكرتون مع قارئ RFID ومحرك سيرفو وباب أوتوماتيكي" 
+              class="hero-main-photo"
+              loading="eager"
+            >
+            <div class="hero-photo-tag">
+              <span>📸 نموذج حي: منزل كرتوني بباب أوتوماتيكي ذكي وقارئ RFID عند المدخل</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ====================================================================
+         القسم 2: كيف يعمل النظام؟ والمحاكاة التفاعلية (HOW IT WORKS & SIMULATION)
+         ==================================================================== -->
+    <section class="section-wrapper" id="simulation">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">💡 رحلة الإشارة المنطقية</span>
+          <h2 class="section-title">كيف يفكر ويعمل الباب الذكي؟</h2>
+          <p class="section-desc">
+            قبل أن نوصل أي سلك، دعنا نتتبع معًا القصة التي تحدث في جزء من الثانية بين البطاقة والأردوينو والمحرك!
+          </p>
+        </div>
+
+        <!-- مخطط التدفق المرئي -->
+        <div class="flow-diagram">
+          <div class="flow-step">
+            <div class="flow-step-num">1</div>
+            <div class="flow-step-icon">🪪</div>
+            <h4>تقريب البطاقة</h4>
+            <p>يقرب الطفل بطاقة RFID من القارئ المثبت بجوار باب المنزل.</p>
+          </div>
+          <div class="flow-step">
+            <div class="flow-step-num">2</div>
+            <div class="flow-step-icon">📡</div>
+            <h4>قراءة المعرف</h4>
+            <p>يقرأ موديول RC522 رقم التعريف اللاسلكي السري للبطاقة (UID).</p>
+          </div>
+          <div class="flow-step">
+            <div class="flow-step-num">3</div>
+            <div class="flow-step-icon">🧠</div>
+            <h4>اتخاذ القرار</h4>
+            <p>يقارن أردوينو الرقم: هل يطابق البطاقة المصرح بها؟ (if / else)</p>
+          </div>
+          <div class="flow-step">
+            <div class="flow-step-num">4</div>
+            <div class="flow-step-icon">🚪🤫</div>
+            <h4>فتح الباب بهدوء (دون إنذار)</h4>
+            <p>إذا كانت البطاقة صحيحة، يفتح الباب تلقائياً لمدة 3 ثوانٍ بهدوء تام دون تشغيل صفارة الإنذار (الجرس صامت تماماً).</p>
+          </div>
+          <div class="flow-step">
+            <div class="flow-step-num">5</div>
+            <div class="flow-step-icon">🚨🔒</div>
+            <h4>صفارة إنذار للبطاقة الخاطئة</h4>
+            <p>إذا كانت البطاقة خاطئة، يطلق جرس الإنذار (Buzzer) صفارة تحذيرية لإخافة الدخيل، ويبقى الباب مغلقاً بإحكام!</p>
+          </div>
+        </div>
+
+        <!-- صندوق المحاكاة التفاعلية الحي -->
+        <div class="sim-workbench">
+          <div class="sim-header">
+            <div class="sim-title">
+              <span>🎮 محاكي الباب الذكي الحي (اختبر التجربة الآن!)</span>
+            </div>
+            <div class="sim-controls-top">
+              <button class="sound-toggle-btn" id="soundToggleBtn">🔊 الصوت: مفعل</button>
+              <button class="btn btn-sm btn-secondary" id="simBtnReset">🔄 إعادة ضبط</button>
+            </div>
+          </div>
+
+          <div class="sim-grid">
+            <!-- ساحة العرض المرئية للمنزل والباب 3D -->
+            <div class="sim-stage">
+              <div class="house-visual">
+                <!-- سقف كرتوني مثلث -->
+                <div class="house-roof"></div>
+
+                <!-- جدار المنزل الكرتوني -->
+                <div class="house-wall">
+                  <!-- شاشة LCD 16x2 زرقاء على واجهة المنزل -->
+                  <div class="house-lcd">
+                    <div class="lcd-screen" id="simLcdText">
+                      Smart Home Door<br>Scan your card...
+                    </div>
+                  </div>
+
+                  <!-- نافذة لطيفة -->
+                  <div class="house-window"></div>
+
+                  <!-- قارئ RFID عند المدخل -->
+                  <div class="house-rfid" id="simRfidModule" title="قارئ RFID RC522 (انقر هنا أو مرر البطاقة)">
+                    <div class="rfid-antenna-waves"></div>
+                    <div class="rfid-led"></div>
+                  </div>
+
+                  <!-- إطار وفتحة الباب -->
+                                    <!-- جرس الإنذار التنبيهي Buzzer (يطلق صفارة عند البطاقة الخاطئة فقط) -->
+                  <div class="house-buzzer" id="simBuzzerModule" title="جرس الإنذار (Buzzer): يطلق صفارة إنذار عند البطاقة الخاطئة، ويبقى صامتاً عند الصحيحة">
+                    <div class="buzzer-hole"></div>
+                    <div class="buzzer-waves"></div>
+                    <span class="buzzer-tag">Buzzer 🔊</span>
+                  </div>
+
+                  <div class="door-frame">
+                    <!-- محرك السيرفو فوق الباب -->
+                    <div class="house-servo">
+                      <div class="servo-horn" id="simServoHorn"></div>
+                    </div>
+
+                    <!-- ضلفة الباب المتحركة -->
+                    <div class="door-leaf" id="simDoorLeaf">
+                      <div class="door-knob"></div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- شريط العد التنازلي لمدة بقاء الباب مفتوحاً (3 ثوانٍ) -->
+                <div class="door-timer-bar" id="simTimerBar">
+                  <div class="door-timer-fill" id="simTimerFill"></div>
+                </div>
+              </div>
+                <!-- شريط الحالة المباشر لمؤشرات التجربة -->
+                <div class="sim-led-status-pill" id="simLedStatusPill">
+                  <span class="sim-led-dot" id="simLedStatusDot"></span>
+                  <span id="simLedStatusMsg">في انتظار تمرير البطاقة...</span>
+                </div>
+            </div>
+
+            <!-- لوحة التحكم وتمرير البطاقات -->
+            <div class="sim-panel">
+              <div class="panel-block">
+                <h4><span>1. اختر بطاقة للتمرير أمام القارئ:</span></h4>
+                <div class="cards-deck">
+                  <button class="sim-card-btn authorized" id="simBtnAuth">
+                    <div class="card-icon">🟢</div>
+                    <div class="card-title">بطاقة مقبولة</div>
+                    <div class="card-uid">UID: 8310632D</div>
+                    <span class="badge badge-green" style="margin-top:6px;">مسموح بالدخول ✅</span>
+                  </button>
+
+                  <button class="sim-card-btn unauthorized" id="simBtnUnauth">
+                    <div class="card-icon">🔴</div>
+                    <div class="card-title">بطاقة غير مسجلة</div>
+                    <div class="card-uid">UID: F4829910</div>
+                    <span class="badge badge-red" style="margin-top:6px;">مرفوض الدخول ⛔</span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="panel-block">
+                <h4><span>2. أو جرّب بطاقتك الخاصة:</span></h4>
+                <div class="custom-card-input-wrap">
+                  <input type="text" id="simCustomUid" class="custom-card-input" placeholder="اكتب معرّف UID هنا (مثال: A1B2C3D4)" maxlength="16">
+                  <button class="btn btn-sm btn-primary" id="simBtnCustom">تمرير</button>
+                </div>
+              </div>
+
+              <div class="panel-block" style="flex:1; display:flex; flex-direction:column;">
+                <h4><span>3. مخرجات Arduino Serial Monitor:</span></h4>
+                <div class="sim-serial-log" id="simSerialLog">
+                  <div class="log-entry info">System Ready. Scan card...</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ====================================================================
+         القسم 3: مستكشف المكونات (THE COMPONENT EXPLORER)
+         ==================================================================== -->
+    <section class="section-wrapper" id="components" style="background:#ffffff;">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">🧰 صندوق أدوات المهندس</span>
+          <h2 class="section-title">مستكشف المكونات الحقيقية</h2>
+          <p class="section-desc">
+            تعرّف على قطع مشروعنا بالصور الحقيقية، واكتشف دور كل قطعة في هذا النظام تحديدًا:
+          </p>
+        </div>
+
+        <!-- أزرار التصفية -->
+        <div class="components-filter">
+          <button class="filter-btn active" data-filter="all">جميع المكونات</button>
+          <button class="filter-btn" data-filter="electronics">الدوائر الإلكترونية</button>
+          <button class="filter-btn" data-filter="mechanics">الميكانيكا والبناء</button>
+        </div>
+
+        <div class="components-grid">
+          <!-- 1. أردوينو أونو -->
+          <div class="component-card" data-category="electronics">
+            <div class="component-img-wrap">
+              <span class="badge badge-blue component-badge">أساسي 🧠</span>
+              <img src="../../assets/images/arduino_uno.jpg" alt="لوحة أردوينو أونو الرسمية" class="component-img">
+            </div>
+            <div class="component-body">
+              <div class="component-titles">
+                <h3 class="component-name-ar">Arduino Uno</h3>
+                <span class="component-name-en">المتحكم الدقيق (العقل)</span>
+              </div>
+              <div class="component-role">
+                <strong>دوره في المشروع:</strong> يستقبل بيانات البطاقة من القارئ، يطبق الشروط المنطقية المبرمجة، ويرسل نبضات التحكم الدقيقة للسيرفو.
+              </div>
+              <p class="component-desc">
+                لوحة التطوير الرائدة في العالم التعليمي، مزودة بمعالج ATmega328P ومنافذ رقمية وتناظرية لتوصيل المستشعرات والمحركات.
+              </p>
+            </div>
+          </div>
+
+          <!-- 2. قارئ RFID RC522 -->
+          <div class="component-card" data-category="electronics">
+            <div class="component-img-wrap">
+              <span class="badge badge-blue component-badge">أساسي 📡</span>
+              <img src="../../assets/images/rc522_module.jpg" alt="موديول قارئ البطاقات اللاسلكي RC522" class="component-img">
+            </div>
+            <div class="component-body">
+              <div class="component-titles">
+                <h3 class="component-name-ar">RC522 RFID Reader</h3>
+                <span class="component-name-en">العين الإلكترونية اللاسلكية</span>
+              </div>
+              <div class="component-role">
+                <strong>دوره في المشروع:</strong> يولد مجالاً كهرومغناطيسيًا بتردد 13.56MHz لتغذية شريحة البطاقة وقراءة رقم UID الخاص بها عبر بروتوكول SPI.
+              </div>
+              <p class="component-desc">
+                يعمل بجهد 3.3V فقط، ويتميز بهوائي مطبوع ذكي يستشعر البطاقات المتوافقة عن بُعد يصل إلى بضعة سنتيمترات.
+              </p>
+            </div>
+          </div>
+
+          <!-- 3. بطاقات وميداليات RFID -->
+          <div class="component-card" data-category="electronics">
+            <div class="component-img-wrap">
+              <span class="badge badge-blue component-badge">أساسي 🪪</span>
+              <img src="../../assets/images/rfid_card.jpg" alt="بطاقة RFID تظهر الشريحة والهوائي الداخلي" class="component-img">
+            </div>
+            <div class="component-body">
+              <div class="component-titles">
+                <h3 class="component-name-ar">بطاقة وميدالية RFID</h3>
+                <span class="component-name-en">RFID Card & Key Fob</span>
+              </div>
+              <div class="component-role">
+                <strong>دوره في المشروع:</strong> المفتاح السحري؛ تحتوي البطاقة على شريحة متناهية الصغر وهوائي محيطي يحمل معرّفًا رقميًا فريدًا لا يتكرر (UID).
+              </div>
+              <p class="component-desc">
+                لا تحتاج البطاقة لبطارية! فهي تستمد طاقتها لاسلكيًا من الموجات الصادرة عن القارئ أثناء تقريبها منه.
+              </p>
+            </div>
+          </div>
+
+          <!-- 4. محرك سيرفو SG90 -->
+          <div class="component-card" data-category="mechanics">
+            <div class="component-img-wrap">
+              <span class="badge badge-blue component-badge">أساسي 💪</span>
+              <img src="../../assets/images/sg90_servo.jpg" alt="محرك سيرفو دقيق SG90 9g" class="component-img">
+            </div>
+            <div class="component-body">
+              <div class="component-titles">
+                <h3 class="component-name-ar">محرك سيرفو SG90</h3>
+                <span class="component-name-en">عضلة تحريك الباب</span>
+              </div>
+              <div class="component-role">
+                <strong>دوره في المشروع:</strong> تحويل أوامر أردوينو الكهربائية إلى حركة زاوية ميكانيكية دقيقة تدفع الباب للفتح (90°) ثم الإغلاق (0°).
+              </div>
+              <p class="component-desc">
+                محرك صغير الحجم وخفيف الوزن يحتوي على تروس ومستشعر موضع داخلي يتيح تحديد الزاوية بدقة متناهية.
+              </p>
+            </div>
+          </div>
+
+          <!-- 5. لوحة التجارب Breadboard -->
+          <div class="component-card" data-category="electronics">
+            <div class="component-img-wrap">
+              <span class="badge badge-blue component-badge">أساسي 🔌</span>
+              <img src="../../assets/images/breadboard.png" alt="لوحة توصيل التجارب بدون لحام" class="component-img">
+            </div>
+            <div class="component-body">
+              <div class="component-titles">
+                <h3 class="component-name-ar">لوحة التجارب Breadboard</h3>
+                <span class="component-name-en">منصة التوصيل بدون لحام</span>
+              </div>
+              <div class="component-role">
+                <strong>دوره في المشروع:</strong> تسهيل تنظيم الأسلاك ومشاركة خطوط الطاقة (GND و 5V و 3.3V) وتوصيل المقاومات دون الحاجة للحام دائم.
+              </div>
+              <p class="component-desc">
+                تحتوي بداخلها على شرائح معدنية مرنة تصل النقاط في صفوف وأعمدة مرتبة بعناية لتجربة الدوائر بسرعة وأمان.
+              </p>
+            </div>
+          </div>
+
+          <!-- 6. أسلاك التوصيل Jumper Wires -->
+          <div class="component-card" data-category="electronics">
+            <div class="component-img-wrap">
+              <span class="badge badge-blue component-badge">أساسي 🌈</span>
+              <img src="../../assets/images/jumper_wires.png" alt="أسلاك توصيل مرنة ذكر لذكر وأنثى لذكر" class="component-img">
+            </div>
+            <div class="component-body">
+              <div class="component-titles">
+                <h3 class="component-name-ar">أسلاك التوصيل</h3>
+                <span class="component-name-en">Jumper Wires (Dupont)</span>
+              </div>
+              <div class="component-role">
+                <strong>دوره في المشروع:</strong> شرايين النظام وعصبه؛ تنقل إشارات البيانات السريعة بين القارئ وأردوينو، وتغذي السيرفو بالتيار المطلوب.
+              </div>
+              <p class="component-desc">
+                نستخدم أسلاكًا ملونة لتمييز خطوط الطاقة والأرضي والإشارات بسهولة وتجنب أخطاء التركيب.
+              </p>
+            </div>
+          </div>
+
+          <!-- 7. جرس الإنذار الطنان Buzzer -->
+          <div class="component-card" data-category="electronics">
+            <div class="component-img-wrap">
+              <span class="badge badge-amber component-badge">إنذار صوتي 🔊</span>
+              <img src="../../assets/images/buzzer_real.jpg" alt="جرس الإنذار الصوتي Piezo Buzzer" class="component-img">
+            </div>
+            <div class="component-body">
+              <div class="component-titles">
+                <h3 class="component-name-ar">جرس الإنذار (Piezo Buzzer)</h3>
+                <span class="component-name-en">صفارة التحذير الأمنية</span>
+              </div>
+              <div class="component-role">
+                <strong>دوره في المشروع:</strong> متصل بالمنفذ D2؛ يطلق صفارة إنذار حادة ومفاجئة فور قراءة بطاقة غير مسجلة (خاطئة)، بينما يظل صامتًا تمامًا عند استخدام البطاقة الصحيحة.
+              </div>
+              <p class="component-desc">
+                عنصر كهروبيزوي يحول الإشارات الكهربائية إلى موجات صوتية مسموعة باستخدام دالة <code>tone()</code> و <code>noTone()</code>.
+              </p>
+            </div>
+          </div>
+
+          <!-- 7. كرتون وأعواد خشبية -->
+          <div class="component-card" data-category="mechanics">
+            <div class="component-img-wrap">
+              <span class="badge badge-amber component-badge">أدوات بناء 📦</span>
+              <img src="../../assets/images/project_cardboard_house_2.jpg" alt="هيكل المنزل الكرتوني والباب في ورشة الأستاذ خليل" class="component-img">
+            </div>
+            <div class="component-body">
+              <div class="component-titles">
+                <h3 class="component-name-ar">كرتون وأعواد خشبية</h3>
+                <span class="component-name-en">Cardboard & Craft Sticks</span>
+              </div>
+              <div class="component-role">
+                <strong>دوره في المشروع:</strong> بناء الجدران، وتشكيل فتحة المدخل، وتصنيع باب خفيف يتحرك بسلاسة دون أن يجهد محرك السيرفو الصغير.
+              </div>
+              <p class="component-desc">
+                مادة متوفرة وصديقة للبيئة تمنح الأطفال حرية الابتكار وقص وتلوين المنزل الذكي بالأسلوب الذي يحبونه.
+              </p>
+            </div>
+          </div>
+
+          <!-- 8. مصدر طاقة 5V منظم للسيرفو -->
+          <div class="component-card" data-category="electronics">
+            <div class="component-img-wrap">
+              <span class="badge badge-green component-badge">موصى به 🔋</span>
+              <div style="font-size:4rem; color:var(--color-primary); display:flex; align-items:center; justify-content:center; height:100%;">⚡</div>
+            </div>
+            <div class="component-body">
+              <div class="component-titles">
+                <h3 class="component-name-ar">مصدر طاقة 5V منظم</h3>
+                <span class="component-name-en">External 5V Regulated Supply</span>
+              </div>
+              <div class="component-role">
+                <strong>دوره في المشروع:</strong> تزويد محرك السيرفو بتيار كافٍ ومستقل، لمنع حدوث هبوط مفاجئ في الجهد قد يعيد تشغيل Arduino!
+              </div>
+              <p class="component-desc">
+                يمكن تجربة السيرفو أولاً من منفذ 5V في Arduino، ولكن عند تشغيل النظام المتكامل يفضل مصدر طاقة خارجي مع ربط الأرضي (GND) المشترك.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ====================================================================
+         القسم 4: إرشادات الأمان والاستعداد (SAFETY & PREPARATION)
+         ==================================================================== -->
+    <section class="section-wrapper" id="safety">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">🛡️ السلامة أولاً</span>
+          <h2 class="section-title">قواعد المهندس الصغير الذهبية</h2>
+          <p class="section-desc">
+            المهندس الذكي هو الذي يحمي نفسه ومكوناته الإلكترونية من التلف قبل البدء بالتجربة!
+          </p>
+        </div>
+
+        <div class="safety-grid">
+          <div class="safety-card critical">
+            <div class="safety-icon-wrap">⚡</div>
+            <div class="safety-content">
+              <h4>1. افصل الطاقة قبل تغيير أي سلك</h4>
+              <p>لا تعدل توصيلات الدائرة والـ USB موصول بالحاسوب. التلامس العرضي بين الأسلاك قد يسبب قصرًا كهربائيًا (Short Circuit) يتلف اللوحة.</p>
+            </div>
+          </div>
+
+          <div class="safety-card critical">
+            <div class="safety-icon-wrap">⚠️</div>
+            <div class="safety-content">
+              <h4>2. قارئ RC522 يحتاج 3.3V فقط!</h4>
+              <p>إياك وتوصيل منفذ VCC في قارئ RFID بجهد 5V في Arduino؛ فالشريحة مصممة لـ 3.3V فقط والجهد الزائد سيحرقها فورًا دون رجعة.</p>
+            </div>
+          </div>
+
+          <div class="safety-card warning">
+            <div class="safety-icon-wrap">🔄</div>
+            <div class="safety-content">
+              <h4>3. مستويات الجهد المنطقي (Logic Levels)</h4>
+              <p>يعمل RC522 بمنطق 3.3V. من الأفضل حماية مداخل القارئ باستخدام محول مستويات منطقية (Level Shifter) على خطوط إشارات Arduino ذي منطق 5V.</p>
+            </div>
+          </div>
+
+          <div class="safety-card warning">
+            <div class="safety-icon-wrap">🔋</div>
+            <div class="safety-content">
+              <h4>4. أرضي مشترك مع مصدر طاقة السيرفو</h4>
+              <p>إذا استخدمت بطارية أو محولاً خارجياً للسيرفو، يجب حتماً وصل سلك GND الخارجي مع سلك GND في Arduino لتوحيد المرجع الكهربائي.</p>
+            </div>
+          </div>
+
+          <div class="safety-card info">
+            <div class="safety-icon-wrap">⚙️</div>
+            <div class="safety-content">
+              <h4>5. لا تجبر ذراع السيرفو بيدك</h4>
+              <p>محرك SG90 يحتوي على تروس بلاستيكية دقيقة. لا تدور الذراع بالقوة بيديك لأن هذا يكسر الأسنان الداخلية للمحرك.</p>
+            </div>
+          </div>
+
+          <div class="safety-card info">
+            <div class="safety-icon-wrap">✂️</div>
+            <div class="safety-content">
+              <h4>6. أدوات القص الحادة بإشراف الأستاذ</h4>
+              <p>استخدم المقص والمشرط لقص فتحات الكرتون فقط تحت إشراف الأستاذ خليل، وتأكد من إبعاد أصابعك عن حافة الشفرة دائماً.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="safety-banner">
+          <div class="safety-banner-icon">💡</div>
+          <div class="safety-banner-text">
+            <h4>تنبيه تعليمي هام من الأستاذ خليل:</h4>
+            <p>
+              هذا المشروع هو <strong>نموذج تعليمي وتطبيقي لفهم التحكم الإلكتروني</strong>، وليس نظام حماية منزلياً حقيقياً! فالتحقق من رقم UID اللاسلكي وحده لا يوفر أمانًا كافيًا للأبواب الواقعية، لأن بعض البطاقات يمكن استنساخها. الهدف هنا هو بناء نموذج مصغر ذكي وممتع!
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ====================================================================
+         القسم 5: مختبر التوصيلات التفاعلي (WIRING LAB)
+         ==================================================================== -->
+    <section class="section-wrapper" id="wiring" style="background:#ffffff;">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">🔌 خريطة الدائرة الكهربائية</span>
+          <h2 class="section-title">مختبر التوصيلات التفاعلي</h2>
+          <p class="section-desc">
+            انقر على أي سلك أو صف في الجدول لإبراز مسار الإشارة ومعرفة وظيفته فورًا:
+          </p>
+        </div>
+
+        <div class="wiring-layout">
+          <!-- مخطط SVG التفاعلي ذو الدقة العالية والدقة التقنية المؤكدة -->
+          <div class="wiring-diagram-box">
+            <div class="wiring-diagram-header">
+              <span class="badge badge-blue">مخطط التوصيلات المباشر</span>
+              <span style="font-size:0.85rem; color:var(--text-muted);" id="wiringSelectedInfo">
+                👉 انقر على أي سلك أو صف جدول لتتبعه
+              </span>
+            </div>
+
+            <div class="wiring-svg-wrapper">
+              <svg viewBox="0 0 760 520" class="wiring-svg" xmlns="http://www.w3.org/2000/svg">
+                <!-- خلفية ناعمة وشبكة خفيفة -->
+                <rect width="760" height="520" fill="#f8fafc" rx="12"/>
+                <defs>
+                  <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+                    <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#e2e8f0" stroke-width="0.5"/>
+                  </pattern>
+                </defs>
+                <rect width="760" height="520" fill="url(#grid)" rx="12"/>
+
+                <!-- ================= لوحة أردوينو أونو ================= -->
+                <g id="arduino-board">
+                  <rect x="250" y="80" width="260" height="360" rx="10" fill="#00878F" stroke="#005B60" stroke-width="4"/>
+                  <rect x="270" y="100" width="60" height="70" fill="#Silver" rx="4" stroke="#888"/>
+                  <text x="300" y="140" fill="#444" font-family="sans-serif" font-size="11" text-anchor="middle">USB</text>
+
+                  <rect x="270" y="350" width="50" height="70" fill="#222" rx="4"/>
+                  <text x="295" y="390" fill="#bbb" font-family="sans-serif" font-size="10" text-anchor="middle">POWER</text>
+
+                  <!-- اسم اللوحة -->
+                  <text x="380" y="240" fill="#ffffff" font-family="sans-serif" font-weight="900" font-size="20" text-anchor="middle">ARDUINO</text>
+                  <text x="380" y="265" fill="#ffffff" font-family="sans-serif" font-weight="700" font-size="15" text-anchor="middle">UNO R3</text>
+
+                  <!-- هيدر المنافذ الرقمية (الجانب العلوي/الأيمن) -->
+                  <rect x="475" y="100" width="25" height="240" fill="#1e293b" rx="3"/>
+                  <!-- دبابيس D6, D9, D10, D11, D12, D13 -->
+                  <!-- D13 -->
+                  <circle cx="487" cy="120" r="5" fill="#facc15" id="pin-d13"/>
+                  <text x="465" y="124" fill="#fff" font-size="10" font-family="monospace">D13</text>
+
+                  <!-- D12 -->
+                  <circle cx="487" cy="140" r="5" fill="#a855f7" id="pin-d12"/>
+                  <text x="465" y="144" fill="#fff" font-size="10" font-family="monospace">D12</text>
+
+                  <!-- D11 -->
+                  <circle cx="487" cy="160" r="5" fill="#22c55e" id="pin-d11"/>
+                  <text x="465" y="164" fill="#fff" font-size="10" font-family="monospace">D11</text>
+
+                  <!-- D10 -->
+                  <circle cx="487" cy="180" r="5" fill="#38bdf8" id="pin-d10"/>
+                  <text x="465" y="184" fill="#fff" font-size="10" font-family="monospace">D10</text>
+
+                  <!-- D9 -->
+                  <circle cx="487" cy="200" r="5" fill="#e2e8f0" stroke="#475569" id="pin-d9"/>
+                  <text x="465" y="204" fill="#fff" font-size="10" font-family="monospace">D9</text>
+
+                  <!-- D6 (السيرفو) -->
+                  <circle cx="487" cy="260" r="5" fill="#f97316" id="pin-d6"/>
+                  <text x="465" y="264" fill="#fff" font-size="10" font-family="monospace">D6</text>
+
+                  <!-- هيدر الطاقة (الجانب الأيسر/السفلي) -->
+                  <rect x="255" y="200" width="25" height="130" fill="#1e293b" rx="3"/>
+                  <!-- 3.3V -->
+                  <circle cx="267" cy="225" r="5" fill="#ef4444" id="pin-3v3"/>
+                  <text x="290" y="229" fill="#fff" font-size="10" font-family="monospace">3.3V</text>
+
+                  <!-- 5V -->
+                  <circle cx="267" cy="250" r="5" fill="#dc2626" id="pin-5v"/>
+                  <text x="290" y="254" fill="#fff" font-size="10" font-family="monospace">5V</text>
+
+                  <!-- GND -->
+                  <circle cx="267" cy="275" r="5" fill="#0f172a" stroke="#fff" id="pin-gnd"/>
+                  <text x="290" y="279" fill="#fff" font-size="10" font-family="monospace">GND</text>
+                </g>
+
+                <!-- ================= قارئ RFID RC522 ================= -->
+                <g id="rfid-board">
+                  <rect x="560" y="110" width="160" height="230" rx="8" fill="#0f4c81" stroke="#092d4f" stroke-width="3"/>
+                  <circle cx="640" cy="230" r="45" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2" stroke-dasharray="4,4"/>
+                  <circle cx="640" cy="230" r="28" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="2"/>
+                  <text x="640" y="295" fill="#fff" font-family="sans-serif" font-weight="700" font-size="12" text-anchor="middle">RFID-RC522</text>
+
+                  <!-- دبابيس التوصيل الثمانية -->
+                  <rect x="565" y="120" width="150" height="20" fill="#1e293b" rx="2"/>
+                  <!-- SDA -->
+                  <circle cx="575" cy="130" r="4" fill="#38bdf8"/>
+                  <text x="575" y="152" fill="#fff" font-size="8" text-anchor="middle">SDA</text>
+                  <!-- SCK -->
+                  <circle cx="595" cy="130" r="4" fill="#facc15"/>
+                  <text x="595" y="152" fill="#fff" font-size="8" text-anchor="middle">SCK</text>
+                  <!-- MOSI -->
+                  <circle cx="615" cy="130" r="4" fill="#22c55e"/>
+                  <text x="615" y="152" fill="#fff" font-size="8" text-anchor="middle">MOSI</text>
+                  <!-- MISO -->
+                  <circle cx="635" cy="130" r="4" fill="#a855f7"/>
+                  <text x="635" y="152" fill="#fff" font-size="8" text-anchor="middle">MISO</text>
+                  <!-- IRQ -->
+                  <circle cx="655" cy="130" r="4" fill="#64748b"/>
+                  <text x="655" y="152" fill="#94a3b8" font-size="8" text-anchor="middle">IRQ</text>
+                  <!-- GND -->
+                  <circle cx="675" cy="130" r="4" fill="#0f172a" stroke="#fff"/>
+                  <text x="675" y="152" fill="#fff" font-size="8" text-anchor="middle">GND</text>
+                  <!-- RST -->
+                  <circle cx="695" cy="130" r="4" fill="#e2e8f0"/>
+                  <text x="695" y="152" fill="#fff" font-size="8" text-anchor="middle">RST</text>
+                  <!-- 3.3V -->
+                  <circle cx="705" cy="130" r="4" fill="#ef4444"/>
+                  <text x="705" y="152" fill="#f87171" font-size="8" text-anchor="middle">3.3V</text>
+                </g>
+
+                <!-- ================= محرك السيرفو SG90 ================= -->
+                <g id="servo-motor">
+                  <rect x="30" y="240" width="140" height="90" rx="6" fill="#0070ba" stroke="#004c80" stroke-width="3"/>
+                  <circle cx="65" cy="285" r="22" fill="#005a96"/>
+                  <rect x="58" y="280" width="60" height="10" fill="#fff" rx="3" stroke="#ccc"/>
+                  <text x="100" y="318" fill="#fff" font-family="sans-serif" font-weight="700" font-size="12">SG90 9g</text>
+
+                  <!-- كابل السيرفو ثلاثي الأسلاك -->
+                  <circle cx="165" cy="270" r="4" fill="#f97316"/> <!-- Signal -->
+                  <circle cx="165" cy="285" r="4" fill="#dc2626"/> <!-- VCC 5V -->
+                  <circle cx="165" cy="300" r="4" fill="#451a03"/> <!-- GND -->
+                  <text x="145" y="260" fill="#f97316" font-size="9">Sig(D6)</text>
+                  <text x="145" y="325" fill="#451a03" font-size="9">GND</text>
+                </g>
+
+                <!-- ================= مسارات الأسلاك الملونة ================= -->
+                <!-- 1. سلك SDA / SS (D10) -> أزرق -->
+                <path d="M 487 180 C 520 180, 540 60, 575 130" stroke="#0284c7" class="wire-path" id="wire-sda"/>
+
+                <!-- 2. سلك SCK (D13) -> أصفر -->
+                <path d="M 487 120 C 530 120, 560 50, 595 130" stroke="#eab308" class="wire-path" id="wire-sck"/>
+
+                <!-- 3. سلك MOSI (D11) -> أخضر -->
+                <path d="M 487 160 C 530 160, 570 70, 615 130" stroke="#10b981" class="wire-path" id="wire-mosi"/>
+
+                <!-- 4. سلك MISO (D12) -> بنفسجي -->
+                <path d="M 487 140 C 540 140, 590 80, 635 130" stroke="#a855f7" class="wire-path" id="wire-miso"/>
+
+                <!-- 5. سلك RST (D9) -> رمادي/أبيض -->
+                <path d="M 487 200 C 550 200, 640 40, 695 130" stroke="#94a3b8" class="wire-path" id="wire-rst"/>
+
+                <!-- 6. سلك تغذية القارئ 3.3V -> أحمر وردي -->
+                <path d="M 267 225 C 240 225, 240 30, 705 30 L 705 130" stroke="#f43f5e" class="wire-path" id="wire-rfid33v"/>
+
+                <!-- 7. سلك أرضي القارئ GND -> أسود -->
+                <path d="M 267 275 C 210 275, 210 15, 675 15 L 675 130" stroke="#0f172a" class="wire-path" id="wire-rfidgnd"/>
+
+                <!-- 8. سلك إشارة السيرفو Signal (D6) -> برتقالي -->
+                <path d="M 487 260 C 420 480, 190 480, 165 270" stroke="#f97316" class="wire-path" id="wire-servosig"/>
+
+                <!-- 9. سلك تغذية السيرفو 5V -> أحمر غامق -->
+                <path d="M 267 250 C 230 250, 200 285, 165 285" stroke="#dc2626" class="wire-path" id="wire-servopwr"/>
+
+                <!-- 10. سلك أرضي السيرفو GND -> أسود/بني -->
+                <path d="M 267 275 C 230 275, 200 300, 165 300" stroke="#334155" class="wire-path" id="wire-servognd"/>
+              </svg>
+            </div>
+          </div>
+
+          <!-- جدول التوصيلات المنظم -->
+          <div class="wiring-info-panel">
+            <div class="pinout-table-card">
+              <div class="table-header">
+                <h4>جدول توصيلات قارئ RFID RC522</h4>
+              </div>
+              <table class="interactive-table">
+                <thead>
+                  <tr>
+                    <th>طرف RC522</th>
+                    <th>منفذ Arduino</th>
+                    <th>السلك والوظيفة</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr data-pin="sda">
+                    <td><span class="wire-color-dot" style="background:#0284c7;"></span>SDA (SS)</td>
+                    <td><strong>D10</strong></td>
+                    <td>سلك اختيار الجهاز وبدء التواصل</td>
+                  </tr>
+                  <tr data-pin="sck">
+                    <td><span class="wire-color-dot" style="background:#eab308;"></span>SCK</td>
+                    <td><strong>D13</strong></td>
+                    <td>نبضات الساعة لضبط سرعة النقل</td>
+                  </tr>
+                  <tr data-pin="mosi">
+                    <td><span class="wire-color-dot" style="background:#10b981;"></span>MOSI</td>
+                    <td><strong>D11</strong></td>
+                    <td>إرسال البيانات من Arduino للقارئ</td>
+                  </tr>
+                  <tr data-pin="miso">
+                    <td><span class="wire-color-dot" style="background:#a855f7;"></span>MISO</td>
+                    <td><strong>D12</strong></td>
+                    <td>استقبال بيانات البطاقة من القارئ</td>
+                  </tr>
+                  <tr data-pin="rst">
+                    <td><span class="wire-color-dot" style="background:#94a3b8;"></span>RST</td>
+                    <td><strong>D9</strong></td>
+                    <td>خط إعادة الضبط والتنشيط (Reset)</td>
+                  </tr>
+                  <tr data-pin="rfidgnd">
+                    <td><span class="wire-color-dot" style="background:#0f172a;"></span>GND</td>
+                    <td><strong>GND</strong></td>
+                    <td>الأرضي المرجعي للدائرة</td>
+                  </tr>
+                  <tr data-pin="rfid33v">
+                    <td><span class="wire-color-dot" style="background:#f43f5e;"></span>3.3V</td>
+                    <td><strong>3.3V</strong></td>
+                    <td>تغذية طاقة آمنة (إياك وتوصيله بـ 5V!)</td>
+                  </tr>
+                  <tr style="opacity:0.6; cursor:default;">
+                    <td>IRQ</td>
+                    <td>دون توصيل</td>
+                    <td>إشارة المقاطعة (غير مستخدم في الورشة)</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="pinout-table-card">
+              <div class="table-header">
+                <h4>جدول توصيلات محرك السيرفو SG90</h4>
+              </div>
+              <table class="interactive-table">
+                <thead>
+                  <tr>
+                    <th>سلك السيرفو</th>
+                    <th>التوصيل</th>
+                    <th>الوظيفة</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr data-pin="servosig">
+                    <td><span class="wire-color-dot" style="background:#f97316;"></span>البرتقالي / الأصفر</td>
+                    <td><strong>D6</strong></td>
+                    <td>إشارة النبضات (PWM) لتحديد الزاوية</td>
+                  </tr>
+                  <tr data-pin="servopwr">
+                    <td><span class="wire-color-dot" style="background:#dc2626;"></span>الأحمر</td>
+                    <td><strong>5V (مصدر منظم)</strong></td>
+                    <td>تغذية المحرك بالطاقة الكافية</td>
+                  </tr>
+                  <tr data-pin="servognd">
+                    <td><span class="wire-color-dot" style="background:#334155;"></span>البني / الأسود</td>
+                    <td><strong>GND مشترك</strong></td>
+                    <td>الأرضي المرجعي المشترك مع Arduino</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+                        <!-- جدول توصيل جرس الإنذار Buzzer -->
+            <div class="pinout-table-card">
+              <div class="table-header">
+                <h4>جدول توصيل جرس الإنذار التنبيهي (Buzzer)</h4>
+              </div>
+              <table class="interactive-table">
+                <thead>
+                  <tr>
+                    <th>طرف جرس الإنذار</th>
+                    <th>منفذ Arduino</th>
+                    <th>طريقة التوصيل والوظيفة</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="wire-color-dot" style="background:#ef4444;"></span>الطرف الموجب (+) للجرس (الساق الطويلة)</td>
+                    <td><strong>D2</strong></td>
+                    <td>المنفذ الرقمي للتحكم بالصوت <code>tone()</code> عند رفض البطاقة</td>
+                  </tr>
+                  <tr>
+                    <td><span class="wire-color-dot" style="background:#0f172a;"></span>الطرف السالب (-) للجرس (الساق القصيرة)</td>
+                    <td><strong>GND</strong></td>
+                    <td>سكة خط الأرضي المشتركة على لوح التجارب Breadboard</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="wiring-tip-box">
+              <strong>💡 نصيحة الأستاذ خليل للتوصيل:</strong>
+              «ركّب أسلاك السيرفو أولاً واختبر حركته، ثم أضف أسلاك قارئ RFID بترتيب الجدول. ولا تحرّك الأسلاك إطلاقًا عندما يكون كابل USB موصولًا بالكهرباء!»
+            </div>
+          </div>
+        </div>
+                      <!-- دليل توصيل جرس الإنذار (Piezo Buzzer) خطوة بخطوة للأطفال -->
+        <div class="buzzer-wiring-guide-card" style="margin-top:2.5rem; background:#ffffff; border-radius:var(--radius-lg); border:2px solid var(--border-medium); padding:2rem; box-shadow:var(--shadow-sm);">
+          <div style="display:flex; align-items:center; gap:0.85rem; margin-bottom:1.5rem; border-bottom:1px solid var(--border-subtle); padding-bottom:1rem;">
+            <span style="font-size:2rem; background:var(--color-primary-light); padding:0.4rem 0.6rem; border-radius:var(--radius-md);">🔊</span>
+            <div>
+              <h3 style="font-size:1.3rem; font-weight:900; color:var(--text-primary); margin:0;">دليل توصيل جرس الإنذار (Piezo Buzzer) خطوة بخطوة</h3>
+              <p style="color:var(--text-muted); font-size:0.92rem; margin:0.25rem 0 0;">كيف نربط جرس التنبيه بالمنفذ D2 ليطلق صفارة إنذار عند البطاقة الخاطئة فقط ويبقى صامتًا عند البطاقة الصحيحة؟</p>
+            </div>
+          </div>
+
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:1.25rem;">
+            <!-- الخطوة 1 -->
+            <div style="background:var(--bg-subtle); border-radius:var(--radius-md); padding:1.25rem; border:1px solid var(--border-subtle);">
+              <div style="display:flex; align-items:center; gap:0.5rem; margin-bottom:0.6rem;">
+                <span class="badge badge-blue" style="font-weight:800;">الخطوة 1</span>
+                <h4 style="font-size:1.05rem; font-weight:800; margin:0;">معرفة قطبي الجرس (+ و -)</h4>
+              </div>
+              <p style="font-size:0.9rem; color:var(--text-secondary); line-height:1.7; margin:0;">
+                انظر جيدًا لقطبي الجرس الطنان:
+                <br>• <strong>الطرف الموجب (+):</strong> الساق الأطول، وتجد علامة <code>+</code> محفورة على جسم الجرس أو مطبوعة على ملصق الحماية العلوي.
+                <br>• <strong>الطرف السالب (-):</strong> الساق الأقصر، ويتصل بسكة الأرضي <strong>GND</strong>.
+              </p>
+            </div>
+
+            <!-- الخطوة 2 -->
+            <div style="background:var(--bg-subtle); border-radius:var(--radius-md); padding:1.25rem; border:1px solid var(--border-subtle);">
+              <div style="display:flex; align-items:center; gap:0.5rem; margin-bottom:0.6rem;">
+                <span class="badge badge-amber" style="font-weight:800;">الخطوة 2</span>
+                <h4 style="font-size:1.05rem; font-weight:800; margin:0;">المنطق الأمني في الورشة</h4>
+              </div>
+              <p style="font-size:0.9rem; color:var(--text-secondary); line-height:1.7; margin:0;">
+                • <strong>عند البطاقة الصحيحة:</strong> المنفذ D2 يبقى صامتًا تمامًا <code>noTone(BUZZER_PIN)</code> ليفتح الباب بهدوء وسلاسة لمدة 3 ثوانٍ.
+                <br>• <strong>عند البطاقة الخاطئة:</strong> يطلق المنفذ D2 نغمة حادة ومفاجئة <code>tone(BUZZER_PIN, 1000)</code> لمدة ثانية ونصف لتنبيه الجميع بوجود محاولة دخول غير مصرح بها!
+              </p>
+            </div>
+
+            <!-- الخطوة 3 -->
+            <div style="background:var(--bg-subtle); border-radius:var(--radius-md); padding:1.25rem; border:1px solid var(--border-subtle);">
+              <div style="display:flex; align-items:center; gap:0.5rem; margin-bottom:0.6rem;">
+                <span class="badge badge-green" style="font-weight:800;">الخطوة 3</span>
+                <h4 style="font-size:1.05rem; font-weight:800; margin:0;">التوصيل على لوح التجارب</h4>
+              </div>
+              <p style="font-size:0.9rem; color:var(--text-secondary); line-height:1.7; margin:0;">
+                1. اغرس الطرف السالب (-) للجرس في خط الأرضي <strong>GND</strong> الأزرق المشترك.
+                <br>2. اغرس الطرف الموجب (+) للجرس في صف مستقل على Breadboard.
+                <br>3. مد سلك جمبر من نفس الصف إلى <strong>المنفذ الرقمي D2</strong> في لوحة أردوينو.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ====================================================================
+         القسم 7: فهم البرنامج وكود أردوينو (UNDERSTAND THE PROGRAM)
+         ==================================================================== -->
+    <section class="section-wrapper" id="code" style="background:#ffffff;">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">💻 كود أردوينو الكامل</span>
+          <h2 class="section-title">برمجة العقل الذكي</h2>
+          <p class="section-desc">
+            هذا هو الكود المعتمد لدرس الأستاذ خليل بدون أي تعديل أو اختصار. انسخه مباشرة وانقر على أي جزء لفهم دوره الهندسي:
+          </p>
+        </div>
+
+        <div class="code-workspace-grid">
+          <!-- عارض الكود مع زر النسخ وتظليل المفاهيم -->
+          <div class="code-viewer-card">
+            <div class="code-header">
+              <div class="code-file-badge">
+                <span>📄 SmartHomeDoor.ino</span>
+              </div>
+              <div class="code-actions">
+                <button class="btn-copy-code" id="copyCodeBtn">📋 <span>نسخ الكود بالكامل</span></button>
+              </div>
+            </div>
+
+            <div class="code-pre-wrap">
+              <pre><code id="arduinoSourceCode"><span class="code-token-kw">#include</span> <span class="code-token-str">&lt;SPI.h&gt;</span>
+<span class="code-token-kw">#include</span> <span class="code-token-str">&lt;MFRC522.h&gt;</span>
+<span class="code-token-kw">#include</span> <span class="code-token-str">&lt;Servo.h&gt;</span>
+
+<span class="code-token-kw">#define</span> SS_PIN <span class="code-token-num">10</span>
+<span class="code-token-kw">#define</span> RST_PIN <span class="code-token-num">9</span>
+<span class="code-token-kw">#define</span> SERVO_PIN <span class="code-token-num">6</span>
+<span class="code-token-kw">#define</span> BUZZER_PIN <span class="code-token-num">2</span>
+
+MFRC522 <span class="code-token-fn">rfid</span>(SS_PIN, RST_PIN);
+Servo door;
+
+<span class="code-token-comment">// رقم البطاقة المسموح لها بالدخول</span>
+<span class="code-token-kw">const</span> String AUTHORIZED_UID = <span class="code-token-str">"8310632D"</span>;
+
+<span class="code-token-comment">// زوايا دوران السيرفو (معكوسة لتناسب اتجاه تركيب الباب لديك)</span>
+<span class="code-token-kw">const</span> <span class="code-token-type">int</span> CLOSED_ANGLE = <span class="code-token-num">90</span>; <span class="code-token-comment">// زاوية الإغلاق</span>
+<span class="code-token-kw">const</span> <span class="code-token-type">int</span> OPEN_ANGLE   = <span class="code-token-num">0</span>;  <span class="code-token-comment">// زاوية الفتح (تم عكس الاتجاه)</span>
+
+<span class="code-token-type">void</span> <span class="code-token-fn token-setup">setup</span>() {
+  Serial.<span class="code-token-fn">begin</span>(<span class="code-token-num">9600</span>);
+
+  SPI.<span class="code-token-fn token-spi">begin</span>();
+  rfid.<span class="code-token-fn token-rfid-init">PCD_Init</span>();
+
+  door.<span class="code-token-fn token-servo-attach">attach</span>(SERVO_PIN);
+
+  <span class="code-token-comment">// إعداد منفذ جرس الإنذار</span>
+  <span class="code-token-fn">pinMode</span>(BUZZER_PIN, OUTPUT);
+  <span class="code-token-fn">noTone</span>(BUZZER_PIN);
+
+  <span class="code-token-comment">// إغلاق الباب عند بدء التشغيل في الزاوية المعكوسة</span>
+  door.<span class="code-token-fn token-door-closed">write</span>(CLOSED_ANGLE);
+
+  Serial.<span class="code-token-fn">println</span>(<span class="code-token-str">"Smart Door System Ready"</span>);
+  Serial.<span class="code-token-fn">println</span>(<span class="code-token-str">"Scan your RFID card..."</span>);
+}
+
+<span class="code-token-type">void</span> <span class="code-token-fn token-loop">loop</span>() {
+
+  <span class="code-token-comment">// انتظار بطاقة جديدة</span>
+  <span class="code-token-kw">if</span> (!rfid.<span class="code-token-fn">PICC_IsNewCardPresent</span>()) {
+    <span class="code-token-kw">return</span>;
+  }
+
+  <span class="code-token-comment">// محاولة قراءة البطاقة</span>
+  <span class="code-token-kw">if</span> (!rfid.<span class="code-token-fn">PICC_ReadCardSerial</span>()) {
+    <span class="code-token-kw">return</span>;
+  }
+
+  <span class="code-token-comment">// استخراج رقم تعريف البطاقة</span>
+  String uid = <span class="code-token-str">""</span>;
+
+  <span class="code-token-kw">for</span> (byte i = <span class="code-token-num">0</span>; i &lt; rfid.uid.size; i++) {
+    <span class="code-token-kw">if</span> (rfid.uid.uidByte[i] &lt; <span class="code-token-num">0x10</span>) {
+      uid += <span class="code-token-str">"0"</span>;
+    }
+
+    uid += String(rfid.uid.uidByte[i], HEX);
+  }
+
+  uid.<span class="code-token-fn">toUpperCase</span>();
+
+  Serial.<span class="code-token-fn">print</span>(<span class="code-token-str">"Card UID: "</span>);
+  Serial.<span class="code-token-fn">println</span>(uid);
+
+  <span class="code-token-comment">// التحقق من البطاقة</span>
+  <span class="code-token-kw token-if">if</span> (uid == AUTHORIZED_UID) {
+
+    Serial.<span class="code-token-fn">println</span>(<span class="code-token-str">"Access Granted!"</span>);
+
+    <span class="code-token-comment">// عند البطاقة الصحيحة: لا يشتغل جرس الإنذار ويفتح الباب</span>
+    <span class="code-token-fn">noTone</span>(BUZZER_PIN);
+
+    <span class="code-token-comment">// فتح الباب بالدوران للزاوية المعكوسة</span>
+    door.<span class="code-token-fn token-door-open">write</span>(OPEN_ANGLE);
+
+    <span class="code-token-fn token-delay">delay</span>(<span class="code-token-num">3000</span>);
+
+    <span class="code-token-comment">// إعادة إغلاق الباب</span>
+    door.<span class="code-token-fn">write</span>(CLOSED_ANGLE);
+
+    Serial.<span class="code-token-fn">println</span>(<span class="code-token-str">"Door Closed"</span>);
+
+  } <span class="code-token-kw token-else">else</span> {
+
+    Serial.<span class="code-token-fn">println</span>(<span class="code-token-str">"Access Denied!"</span>);
+
+    <span class="code-token-comment">// إبقاء الباب مغلقًا</span>
+    door.<span class="code-token-fn">write</span>(CLOSED_ANGLE);
+
+    <span class="code-token-comment">// عند البطاقة الخاطئة: تشغيل صفارة الإنذار</span>
+    <span class="code-token-fn">tone</span>(BUZZER_PIN, <span class="code-token-num">1000</span>);
+    <span class="code-token-fn">delay</span>(<span class="code-token-num">1500</span>);
+    <span class="code-token-fn">noTone</span>(BUZZER_PIN);
+
+  }
+
+  <span class="code-token-comment">// إنهاء قراءة البطاقة</span>
+  rfid.<span class="code-token-fn token-halt">PICC_HaltA</span>();
+  rfid.<span class="code-token-fn">PCD_StopCrypto1</span>();
+
+  <span class="code-token-fn">delay</span>(<span class="code-token-num">500</span>);
+}</code></pre>
+            </div>
+          </div>
+
+          <!-- بطاقات شرح المفاهيم التفاعلية -->
+          <div class="code-explain-cards">
+            <h4 style="font-size:1.05rem; font-weight:800; margin-bottom:0.4rem;">
+              🔍 انقر على أي مفهوم لفهمه داخل المشروع:
+            </h4>
+
+            <div class="code-concept-card" data-target="setup">
+              <div class="concept-header">
+                <span class="concept-syntax">setup()</span>
+                <span class="badge badge-blue">التجهيز</span>
+              </div>
+              <p>تُنفذ مرة واحدة عند تشغيل الأردوينو لتشغيل شاشة الاتصال والبدء في تهيئة السيرفو وقارئ البطاقات.</p>
+            </div>
+
+            <div class="code-concept-card" data-target="loop">
+              <div class="concept-header">
+                <span class="concept-syntax">loop()</span>
+                <span class="badge badge-blue">الحلقة الدائمة</span>
+              </div>
+              <p>حلقة مكررة ليل نهار؛ تفحص باستمرار: هل توجد بطاقة أمام الباب؟ إذا وجدت تبدأ بالقراءة، وإلا تعيد الفحص فورًا.</p>
+            </div>
+
+            <div class="code-concept-card" data-target="uid">
+              <div class="concept-header">
+                <span class="concept-syntax">AUTHORIZED_UID</span>
+                <span class="badge badge-amber">المعرّف المصرح به</span>
+              </div>
+              <p>القيمة التي يجب عليك استبدالها برقم بطاقتك الفعلي المكتشف عبر Serial Monitor (مثال: "31C1BA75").</p>
+            </div>
+
+            <div class="code-concept-card" data-target="if">
+              <div class="concept-header">
+                <span class="concept-syntax">if (uid == AUTHORIZED_UID)</span>
+                <span class="badge badge-green">صانع القرار</span>
+              </div>
+              <p>الشرط المنطقي السحري: هل رقم البطاقة المقروء يطابق البطاقة المسموح بها؟ إذا نعم يفتح الباب، وإلا ينفذ قسم else.</p>
+            </div>
+
+            <div class="code-concept-card" data-target="door-open">
+              <div class="concept-header">
+                <span class="concept-syntax">door.write(OPEN_ANGLE);</span>
+                <span class="badge badge-green">أمر الفتح</span>
+              </div>
+              <p>يأمر محرك السيرفو بالدوران بزاوية 90 درجة لدفع ذراع الباب وفتحه أمام الضيف.</p>
+            </div>
+
+            <div class="code-concept-card" data-target="delay">
+              <div class="concept-header">
+                <span class="concept-syntax">delay(3000);</span>
+                <span class="badge badge-amber">الانتظار الزمني</span>
+              </div>
+              <p>يجعل النظام ينتظر 3000 ميلي ثانية (3 ثوانٍ كاملة) ليبقى الباب مفتوحًا حتى يدخل الشخص قبل إغلاقه.</p>
+            </div>
+
+            <div class="code-concept-card" data-target="halt">
+              <div class="concept-header">
+                <span class="concept-syntax">rfid.PICC_HaltA();</span>
+                <span class="badge badge-blue">إنهاء القراءة</span>
+              </div>
+              <p>يأمر البطاقة بالتوقف المؤقت حتى لا يقرأها أردوينو مئات المرات متتالية أثناء بقائها أمام القارئ.</p>
+            </div>
+          </div>
+        </div>
+              <!-- ================================================================
+             الشرح التفصيلي والشامل لأجزاء كود المشروع خطوة بخطوة
+             ================================================================ -->
+        <div class="code-detailed-breakdown" style="margin-top: 3.5rem; border-top: 2px dashed var(--border-medium); padding-top: 2.5rem;">
+          
+          <div style="display: flex; align-items: center; gap: 0.85rem; margin-bottom: 2rem;">
+            <span style="font-size: 2.2rem; background: var(--color-primary-light); padding: 0.4rem 0.7rem; border-radius: var(--radius-md);">📖</span>
+            <div>
+              <h3 style="font-size: 1.45rem; font-weight: 900; color: var(--text-primary); margin: 0;">الشرح التفصيلي لأسطر البرنامج خطوة بخطوة</h3>
+              <p style="color: var(--text-muted); font-size: 0.95rem; margin: 0.25rem 0 0;">دليل تعليمي معمق يوضح كيف يفكر المعالج الصغير وينفذ أوامرك بدقة متناهية بالملي ثانية:</p>
+            </div>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 1.75rem;">
+
+            <!-- 1. المكتبات والثوابت -->
+            <div style="background: var(--bg-surface); border: 1px solid var(--border-medium); border-radius: var(--radius-lg); padding: 1.75rem; box-shadow: var(--shadow-sm); border-right: 5px solid #0284c7;">
+              <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem;">
+                <h4 style="font-size: 1.15rem; font-weight: 800; color: var(--color-primary); margin: 0;">
+                  🔹 الجزء 1: استدعاء المكتبات وضبط المنافذ والزوايا (الأسطر 1 - 18)
+                </h4>
+                <span class="badge badge-blue">التجهيز والتعريفات</span>
+              </div>
+              <ul style="color: var(--text-secondary); line-height: 1.85; font-size: 0.93rem; padding-right: 1.25rem; margin: 0;">
+                <li>
+                  <code>#include &lt;SPI.h&gt;</code>: بروتوكول الاتصال التسلسلي عالي السرعة (Serial Peripheral Interface). بدونه لا يستطيع أردوينو تبادل ملايين الإشارات في الثانية مع قارئ RFID.
+                </li>
+                <li>
+                  <code>#include &lt;MFRC522.h&gt;</code>: المكتبة المسؤولة عن ترجمة أوامر شريحة RC522، مثل طلب رقم البطاقة وفك شفرات التردد اللاسلكي 13.56MHz.
+                </li>
+                <li>
+                  <code>#include &lt;Servo.h&gt;</code>: مكتبة محرك السيرفو التي تحول الأرقام (كالزاوية 0 أو 90) إلى نبضات كهربائية دقيقة (PWM).
+                </li>
+                <li>
+                  <code>#define SS_PIN 10</code> و <code>RST_PIN 9</code>: تحديد منافذ التحكم بالقارئ؛ SS لاختيار الشريحة و RST لإعادة تشغيلها.
+                </li>
+                <li>
+                  <code>#define BUZZER_PIN 2</code>: حجز المنفذ الرقمي D2 لجرس الإنذار، وهو منفذ حر ومستقل تماماً عن مسارات الـ SPI والـ Serial.
+                </li>
+                <li>
+                  <code>const String AUTHORIZED_UID = "8310632D";</code>: البصمة الرقمية الوحيدة المسموح لها بالدخول. أي بطاقة أخرى ستعتبر دخيلة.
+                </li>
+                <li>
+                  <code>const int CLOSED_ANGLE = 90;</code> و <code>OPEN_ANGLE = 0;</code>: <strong>سر عكس الاتجاه!</strong> وضعنا زاويتي الإغلاق والفتح في متغيرين منفصلين ليمكنك عكس حركة الباب فوراً بتغيير الرقمين دون لمس باقي الكود.
+                </li>
+              </ul>
+            </div>
+
+            <!-- 2. دالة setup -->
+            <div style="background: var(--bg-surface); border: 1px solid var(--border-medium); border-radius: var(--radius-lg); padding: 1.75rem; box-shadow: var(--shadow-sm); border-right: 5px solid #0d9488;">
+              <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem;">
+                <h4 style="font-size: 1.15rem; font-weight: 800; color: var(--color-teal); margin: 0;">
+                  🔹 الجزء 2: دالة التأسيس setup() — تهيئة الأجهزة لمرة واحدة (الأسطر 20 - 39)
+                </h4>
+                <span class="badge badge-green">بدء التشغيل</span>
+              </div>
+              <ul style="color: var(--text-secondary); line-height: 1.85; font-size: 0.93rem; padding-right: 1.25rem; margin: 0;">
+                <li>
+                  <code>Serial.begin(9600);</code>: فتح خط تواصل بين أردوينو وشاشة الحاسوب بسرعة 9600 باود لمراقبة أرقام البطاقات ورسائل النظام.
+                </li>
+                <li>
+                  <code>SPI.begin();</code> ثم <code>rfid.PCD_Init();</code>: إرسال أمر الاستيقاظ للقارئ وتفعيل ملفات الهوائي المحيطي لبث المجال الكهرومغناطيسي.
+                </li>
+                <li>
+                  <code>door.attach(SERVO_PIN);</code>: إعلام أردوينو بأن سلك التحكم الخاص بالسيرفو البرتقالي موصول بالمنفذ الرقمي 6.
+                </li>
+                <li>
+                  <code>pinMode(BUZZER_PIN, OUTPUT);</code> و <code>noTone(BUZZER_PIN);</code>: ضبط منفذ الجرس كمخرج صوتي والتأكد التام من أنه صامت ولا يصدر أي صوت عند وضع الكهرباء.
+                </li>
+                <li>
+                  <code>door.write(CLOSED_ANGLE);</code>: <strong>إجراء أمني حاسم!</strong> إجبار محرك السيرفو على التوجه فوراً لزاوية الإغلاق (90°) ليظل المنزل آمناً ومغلقاً منذ اللحظة الأولى.
+                </li>
+              </ul>
+            </div>
+
+            <!-- 3. دالة loop وقراءة البطاقة -->
+            <div style="background: var(--bg-surface); border: 1px solid var(--border-medium); border-radius: var(--radius-lg); padding: 1.75rem; box-shadow: var(--shadow-sm); border-right: 5px solid #d97706;">
+              <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem;">
+                <h4 style="font-size: 1.15rem; font-weight: 800; color: var(--color-warning-dark); margin: 0;">
+                  🔹 الجزء 3: حراسة الباب واستخراج رقم الـ UID في loop() (الأسطر 41 - 74)
+                </h4>
+                <span class="badge badge-amber">الاستشعار والتحويل</span>
+              </div>
+              <ul style="color: var(--text-secondary); line-height: 1.85; font-size: 0.93rem; padding-right: 1.25rem; margin: 0;">
+                <li>
+                  <code>if (!rfid.PICC_IsNewCardPresent()) return;</code>: الحارس الأول؛ يسأل: هل هناك بطاقة أمام الباب؟ إذا لا، يُنهي الدورة فوراً ويعيد الفحص دون إجهاد المعالج.
+                </li>
+                <li>
+                  <code>if (!rfid.PICC_ReadCardSerial()) return;</code>: الحارس الثاني؛ يحاول قراءة بيانات البطاقة لاسلكياً. إذا كانت الإشارة ضعيفة أو مشوشة، يتجاهلها ويعاود المحاولة.
+                </li>
+                <li>
+                  <strong>حلقة التحويل السداسي عشري (HEX Loop):</strong> رقم البطاقة يتكون من 4 بايتات ثنائية. تمر حلقة <code>for</code> عليها بايتًا بايتًا وتحولها إلى حروف وأرقام مقروءة.
+                </li>
+                <li>
+                  <strong>حيلة الصفر الذكية (Zero Padding):</strong><br>
+                  <code>if (rfid.uid.uidByte[i] &lt; 0x10) uid += "0";</code><br>
+                  إذا كان البايت أصغر من 16 (مثل <code>0x0A</code>)، يقوم الأردوينو افتراضياً بحذف الصفر ويقرؤه <code>A</code> فيفشل التطابق! هذا السطر يضيف الصفر يدوياً ليضمن أن معرّف البطاقة يتكون دائماً من 8 خانات كاملة دون أخطاء.
+                </li>
+              </ul>
+            </div>
+
+            <!-- 4. الشرط المنطقي if else -->
+            <div style="background: var(--bg-surface); border: 1px solid var(--border-medium); border-radius: var(--radius-lg); padding: 1.75rem; box-shadow: var(--shadow-sm); border-right: 5px solid #10b981;">
+              <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem;">
+                <h4 style="font-size: 1.15rem; font-weight: 800; color: var(--color-success-dark); margin: 0;">
+                  🔹 الجزء 4: صانع القرار if / else — فتح الباب أو إطلاق الإنذار (الأسطر 76 - 110)
+                </h4>
+                <span class="badge badge-green">المنطق الأمني</span>
+              </div>
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; margin-top: 1rem;">
+                <!-- فرع القبول -->
+                <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: var(--radius-md); padding: 1.25rem;">
+                  <h5 style="color: #166534; font-weight: 800; font-size: 1rem; margin-bottom: 0.5rem;">
+                    ✅ عند تطابق البطاقة: <code>if (uid == AUTHORIZED_UID)</code>
+                  </h5>
+                  <ol style="color: #14532d; font-size: 0.9rem; line-height: 1.75; padding-right: 1.2rem; margin: 0;">
+                    <li><code>noTone(BUZZER_PIN);</code>: التأكيد على أن جرس الإنذار صامت تماماً لعدم إزعاج صاحب المنزل.</li>
+                    <li><code>door.write(OPEN_ANGLE);</code>: أمر محرك السيرفو بالدوران إلى زاوية الفتح (0°) لدفع الباب.</li>
+                    <li><code>delay(3000);</code>: منح الضيف مهلة 3 ثوانٍ كاملة للدخول براحة قبل الإغلاق.</li>
+                    <li><code>door.write(CLOSED_ANGLE);</code>: إعادة الباب إلى زاوية الإغلاق (90°).</li>
+                  </ol>
+                </div>
+
+                <!-- فرع الرفض -->
+                <div style="background: #fef2f2; border: 1px solid #fecaca; border-radius: var(--radius-md); padding: 1.25rem;">
+                  <h5 style="color: #991b1b; font-weight: 800; font-size: 1rem; margin-bottom: 0.5rem;">
+                    ⛔ عند عدم تطابق البطاقة: <code>else</code>
+                  </h5>
+                  <ol style="color: #7f1d1d; font-size: 0.9rem; line-height: 1.75; padding-right: 1.2rem; margin: 0;">
+                    <li><code>door.write(CLOSED_ANGLE);</code>: التأكيد القاطع على إبقاء الباب مغلقاً لمنع أي اختراق.</li>
+                    <li><code>tone(BUZZER_PIN, 1000);</code>: إطلاق نغمة إنذار حادة بتردد 1000 هرتز لإخافة الدخيل.</li>
+                    <li><code>delay(1500);</code>: استمرار صفارة الإنذار لمدة ثانية ونصف.</li>
+                    <li><code>noTone(BUZZER_PIN);</code>: إيقاف الصوت بعد انتهاء مهلة التحذير.</li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+
+            <!-- 5. إنهاء الدورة والاستعداد -->
+            <div style="background: var(--bg-surface); border: 1px solid var(--border-medium); border-radius: var(--radius-lg); padding: 1.75rem; box-shadow: var(--shadow-sm); border-right: 5px solid #64748b;">
+              <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem;">
+                <h4 style="font-size: 1.15rem; font-weight: 800; color: var(--text-secondary); margin: 0;">
+                  🔹 الجزء 5: إنهاء المعاملة وإراحة المعالج (الأسطر 112 - 118)
+                </h4>
+                <span class="badge">الاستقرار والأمان</span>
+              </div>
+              <ul style="color: var(--text-secondary); line-height: 1.85; font-size: 0.93rem; padding-right: 1.25rem; margin: 0;">
+                <li>
+                  <code>rfid.PICC_HaltA();</code>: أمر تجميد مؤقت للبطاقة الحالية. إذا ظل الطفل ممسكاً بالبطاقة أمام القارئ، يمنع هذا الأمر أردوينو من قراءتها 50 مرة في الثانية وإعادة فتح الباب فوراً!
+                </li>
+                <li>
+                  <code>rfid.PCD_StopCrypto1();</code>: إغلاق جلسة التشفير وتنظيف سجلات ذاكرة القارئ لاستقبال بطاقة جديدة.
+                </li>
+                <li>
+                  <code>delay(500);</code>: فترة أمان زمنية (نصف ثانية) لتفادي ارتداد الإشارات واستقرار النظام قبل بدء حلقة الفحص التالية.
+                </li>
+              </ul>
+            </div>
+
+            <!-- ملخص الدوال السريع -->
+            <div style="background: linear-gradient(135deg, #f8fafc, #f1f5f9); border: 1px solid var(--border-medium); border-radius: var(--radius-lg); padding: 1.75rem;">
+              <h4 style="font-size: 1.1rem; font-weight: 800; color: var(--text-primary); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                <span>⚡</span> قاموس الدوال البرمجية في المشروع (مرجع سريع للمهندس الصغير)
+              </h4>
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem;">
+                <div style="background: white; padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--border-subtle);">
+                  <code style="color: var(--color-primary); font-weight: 800;">door.write(angle)</code>
+                  <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0.3rem 0 0;">تدوير السيرفو لزاوية محددة بين 0 و 180 درجة.</p>
+                </div>
+                <div style="background: white; padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--border-subtle);">
+                  <code style="color: var(--color-danger); font-weight: 800;">tone(pin, freq)</code>
+                  <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0.3rem 0 0;">توليد نغمة صوتية بتردد معين (مثل 1000Hz للإنذار).</p>
+                </div>
+                <div style="background: white; padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--border-subtle);">
+                  <code style="color: var(--color-teal); font-weight: 800;">noTone(pin)</code>
+                  <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0.3rem 0 0;">كتم صوت الجرس فوراً وإيقاف التردد.</p>
+                </div>
+                <div style="background: white; padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--border-subtle);">
+                  <code style="color: var(--color-warning-dark); font-weight: 800;">delay(ms)</code>
+                  <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0.3rem 0 0;">تجميد الوقت بالميلي ثانية (1000ms = ثانية واحدة).</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ====================================================================
+         القسم 8: كيف تكتشف رقم بطاقتك؟ (DISCOVER CARD UID)
+         ==================================================================== -->
+    <section class="section-wrapper" id="discover-uid">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">🔑 سر الدخول</span>
+          <h2 class="section-title">كيف تكتشف رقم بطاقتك (UID)؟</h2>
+          <p class="section-desc">
+            كل بطاقة لها رقم بصمة خاص بها. اتبع هذه الخطوات السبع البسيطة لقراءته وإدخاله في الكود:
+          </p>
+        </div>
+
+        <div class="uid-guide-grid">
+          <!-- الخطوات المرتبة -->
+          <div class="uid-steps-list">
+            <div class="uid-step-item">
+              <div class="uid-step-badge">1</div>
+              <div class="uid-step-content">
+                <h4>ارفع الكود إلى Arduino</h4>
+                <p>انسخ الكود في برنامج Arduino IDE واضغط زر الرفع (Upload ➔) بالرمز السهمي.</p>
+              </div>
+            </div>
+
+            <div class="uid-step-item">
+              <div class="uid-step-badge">2</div>
+              <div class="uid-step-content">
+                <h4>افتح شاشة Serial Monitor</h4>
+                <p>من قائمة Tools اختر Serial Monitor، أو اضغط على أيقونة العدسة في أعلى اليمين.</p>
+              </div>
+            </div>
+
+            <div class="uid-step-item">
+              <div class="uid-step-badge">3</div>
+              <div class="uid-step-content">
+                <h4>اضبط السرعة على 9600 Baud</h4>
+                <p>تأكد أن القائمة السفلية في الشاشة مضبوطة على <strong>9600 baud</strong> لتظهر الكلمات واضحة.</p>
+              </div>
+            </div>
+
+            <div class="uid-step-item">
+              <div class="uid-step-badge">4</div>
+              <div class="uid-step-content">
+                <h4>قرّب بطاقتك من القارئ</h4>
+                <p>مرر البطاقة أمام حساس RC522؛ ستلاحظ ظهور سطر جديد فوراً في الشاشة!</p>
+              </div>
+            </div>
+
+            <div class="uid-step-item">
+              <div class="uid-step-badge">5</div>
+              <div class="uid-step-content">
+                <h4>انسخ رقم UID المعروض</h4>
+                <p>ستشاهد سطراً مثل <code>Card UID: 8310632D</code>. انسخ هذا الرقم المكون من أرقام وحروف.</p>
+              </div>
+            </div>
+
+            <div class="uid-step-item">
+              <div class="uid-step-badge">6</div>
+              <div class="uid-step-content">
+                <h4>استبدل REPLACE_ME في الكود</h4>
+                <p>ضع رقمك مكان العبارة مع الحفاظ على علامتي التنصيص: <code>const String AUTHORIZED_UID = "8310632D";</code></p>
+              </div>
+            </div>
+
+            <div class="uid-step-item">
+              <div class="uid-step-badge">7</div>
+              <div class="uid-step-content">
+                <h4>أعد رفع الكود واستمتع!</h4>
+                <p>اضغط زر الرفع مرة أخرى؛ والآن أصبح منزلك يتعرف على بطاقتك فقط!</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- محاكي Serial Monitor الواقعي التفاعلي -->
+          <div class="serial-monitor-mockup">
+            <div class="serial-top-bar">
+              <span>🖥️ شاشة المراقبة — Arduino Serial Monitor (COM3)</span>
+              <span class="serial-baud-badge">9600 Baud</span>
+            </div>
+
+            <div class="serial-screen" id="serialScreen">
+              <div>Smart Home Door System</div>
+              <div>Scan your card...</div>
+            </div>
+
+            <div class="serial-controls-bar">
+              <button class="btn btn-sm btn-primary" id="serialScanBtn">📱 محاكاة تقريب بطاقتك الآن</button>
+              <button class="btn btn-sm btn-secondary" id="serialCopyUidBtn">📋 نسخ رقم UID المكتشف</button>
+              <button class="btn btn-sm btn-secondary" id="serialClearBtn">مسح الشاشة</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ====================================================================
+         القسم 9: جدول اختبار الباب الذكي (TEST THE SMART DOOR)
+         ==================================================================== -->
+    <section class="section-wrapper" id="testing" style="background:#ffffff;">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">🧪 بروتوكول الاختبار الهندسي</span>
+          <h2 class="section-title">جدول اختبار ومصادقة الباب الذكي</h2>
+          <p class="section-desc">
+            نفّذ هذه الاختبارات الخمسة المنهجية مع أستاذك وضع علامة (✓) بعد نجاح كل اختبار:
+          </p>
+        </div>
+
+        <div class="checklist-container">
+          <div class="checklist-progress-wrap">
+            <div class="progress-info">
+              <span>نسبة جاهزية النظام للاعتماد:</span>
+              <span id="testsProgressText">0% (0 من 5)</span>
+            </div>
+            <div class="progress-track">
+              <div class="progress-fill" id="testsProgressFill"></div>
+            </div>
+          </div>
+
+          <div class="tests-list">
+            <!-- اختبار 1 -->
+            <div class="test-row" data-test="0">
+              <div class="test-checkbox"></div>
+              <div class="test-details">
+                <div class="test-action">الاختبار 1: تشغيل النظام لأول مرة</div>
+                <div class="test-expected">النتيجة المتوقعة: يبدأ الباب مغلقاً تماماً (0°)، وتظهر رسالة البداية في شاشة المراقبة.</div>
+              </div>
+              <span class="badge badge-blue test-badge">الحالة الأولية</span>
+            </div>
+
+            <!-- اختبار 2 -->
+            <div class="test-row" data-test="1">
+              <div class="test-checkbox"></div>
+              <div class="test-details">
+                <div class="test-action">الاختبار 2: تمرير البطاقة المصرح بها</div>
+                <div class="test-expected">النتيجة المتوقعة: يطبع النظام "Access Granted!"، ويدور السيرفو لفتح الباب (90°).</div>
+              </div>
+              <span class="badge badge-green test-badge">قبول الدخول</span>
+            </div>
+
+            <!-- اختبار 3 -->
+            <div class="test-row" data-test="2">
+              <div class="test-checkbox"></div>
+              <div class="test-details">
+                <div class="test-action">الاختبار 3: انتظار 3 ثوانٍ كاملة</div>
+                <div class="test-expected">النتيجة المتوقعة: بعد انقضاء المهلة الزمنية، يعود السيرفو تلقائيًا إلى وضع الإغلاق (0°).</div>
+              </div>
+              <span class="badge badge-amber test-badge">المؤقت التلقائي</span>
+            </div>
+
+            <!-- اختبار 4 -->
+            <div class="test-row" data-test="3">
+              <div class="test-checkbox"></div>
+              <div class="test-details">
+                <div class="test-action">الاختبار 4: تمرير بطاقة ثانية غير مصرح بها</div>
+                <div class="test-expected">النتيجة المتوقعة: يطبع النظام "Access Denied!"، ويبقى الباب مقفلاً دون أي حركة في السيرفو.</div>
+              </div>
+              <span class="badge badge-red test-badge">رفض الغرباء</span>
+            </div>
+
+            <!-- اختبار 5 -->
+            <div class="test-row" data-test="4">
+              <div class="test-checkbox"></div>
+              <div class="test-details">
+                <div class="test-action">الاختبار 5: تكرار الاختبارات عدة مرات</div>
+                <div class="test-expected">النتيجة المتوقعة: يستجيب الباب بنفس الدقة والموثوقية كل مرة دون تهنيج أو اهتزاز.</div>
+              </div>
+              <span class="badge badge-blue test-badge">الاستقرار والجودة</span>
+            </div>
+          </div>
+
+          <div class="test-celebration-banner" id="testCelebrationBanner">
+            <h3 style="font-size:1.3rem; font-weight:900; color:var(--color-success-dark); margin-bottom:0.3rem;">
+              🎉 أحسنت صنعًا يا بطل الهندسة!
+            </h3>
+            <p style="font-size:0.95rem; color:#065f46;">
+              اجتاز بابك الذكي جميع اختبارات المصادقة بنجاح باهر! مشروعك يعمل الآن بكفاءة واقتدار.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ====================================================================
+         القسم 10: مختبر حل المشكلات (TROUBLESHOOTING LAB)
+         ==================================================================== -->
+    <section class="section-wrapper" id="troubleshooting">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">🔧 عيادة المهندس للتشخيص</span>
+          <h2 class="section-title">مختبر حل المشكلات والأعطال</h2>
+          <p class="section-desc">
+            المهندس الحقيقي لا ييأس ولا يستبدل القطع عشوائيًا! اتبع المنهجية العلمية: <strong>افهم المشكلة ➔ افحص السبب ➔ اختبر الفرضية ➔ تأكد من النتيجة</strong>
+          </p>
+        </div>
+
+        <div class="troubleshoot-layout">
+          <!-- مشكلة 1 -->
+          <div class="trouble-card">
+            <div class="trouble-header">
+              <div class="trouble-icon">❌</div>
+              <div class="trouble-title">لا يقرأ قارئ RFID أي بطاقة إطلاقاً</div>
+            </div>
+            <ul class="trouble-checks">
+              <li>تأكد أن سلك 3.3V موصول بمنفذ 3.3V في Arduino وليس 5V.</li>
+              <li>راجع أسلاك SPI الستة بدقة: D10(SDA), D13(SCK), D11(MOSI), D12(MISO), D9(RST).</li>
+              <li>تأكد من تثبيت مكتبة <code>MFRC522</code> من مدير المكتبات في Arduino IDE.</li>
+            </ul>
+          </div>
+
+          <!-- مشكلة 2 -->
+          <div class="trouble-card">
+            <div class="trouble-header">
+              <div class="trouble-icon">🔍</div>
+              <div class="trouble-title">تظهر أرقام البطاقة في الشاشة لكن الباب لا يفتح!</div>
+            </div>
+            <ul class="trouble-checks">
+              <li>تأكد من تطابق رقم UID في متغير <code>AUTHORIZED_UID</code> حرفًا بحرف.</li>
+              <li>تأكد من وجود علامات التنصيص المزدوجة <code>"..."</code> حول الرقم.</li>
+              <li>تأكد من أن الحروف الإنجليزية كبيرة (Uppercase) مثل A1B2 بدلاً من a1b2.</li>
+            </ul>
+          </div>
+
+          <!-- مشكلة 3 -->
+          <div class="trouble-card">
+            <div class="trouble-header">
+              <div class="trouble-icon">🚪</div>
+              <div class="trouble-title">الباب يفتح أول مرة ولا يغلق أبداً!</div>
+            </div>
+            <ul class="trouble-checks">
+              <li>افحص أمر <code>delay(3000);</code> وأمر <code>door.write(CLOSED_ANGLE);</code> بعده.</li>
+              <li>تأكد من استقرار أسلاك التغذية والأرضي المتصلة بالسيرفو.</li>
+              <li>تأكد أن ذراع السيرفو لم تعلق ميكانيكياً في حافة جدار الكرتون.</li>
+            </ul>
+          </div>
+
+          <!-- مشكلة 4 -->
+          <div class="trouble-card">
+            <div class="trouble-header">
+              <div class="trouble-icon">⚡</div>
+              <div class="trouble-title">السيرفو يهتز بعنف أو يعيد تشغيل Arduino!</div>
+            </div>
+            <ul class="trouble-checks">
+              <li>السيرفو يسحب تياراً أعلى مما يوفره منفذ USB، مما يسبب هبوط الجهد.</li>
+              <li>استخدم مصدر 5V خارجي منظم للسيرفو.</li>
+              <li><strong>مهم جداً:</strong> تأكد من ربط أرضي المصدر الخارجي (GND) مع أرضي Arduino.</li>
+            </ul>
+          </div>
+
+          <!-- مشكلة 5 -->
+          <div class="trouble-card">
+            <div class="trouble-header">
+              <div class="trouble-icon">🔄</div>
+              <div class="trouble-title">الباب يتحرك في الاتجاه المعاكس للفتح!</div>
+            </div>
+            <ul class="trouble-checks">
+              <li>عكس الاتجاه يعني أن زاوية البداية تحتاج تعديلاً.</li>
+              <li>بدّل القيمتين في الكود: اجعل <code>CLOSED_ANGLE = 90;</code> و <code>OPEN_ANGLE = 0;</code></li>
+              <li>أو فك ذراع السيرفو البلاستيكي وثبته في الزاوية المقابلة يدويًا.</li>
+            </ul>
+          </div>
+
+          <!-- مشكلة 6 -->
+          <div class="trouble-card">
+            <div class="trouble-header">
+              <div class="trouble-icon">📦</div>
+              <div class="trouble-title">يعمل المشروع على الطاولة ويتوقف داخل المنزل!</div>
+            </div>
+            <ul class="trouble-checks">
+              <li>افحص الأسلاك؛ غالباً ما ينفصل سلك بسبب الشد عند إدخال المكونات للمنزل.</li>
+              <li>تأكد من أن الكرتون لا يضغط على ذراع السيرفو بحرية دورانه.</li>
+              <li>تأكد أن القارئ ليس مغطى بطبقات كرتون سميكة تعزل الإشارة.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ====================================================================
+         القسم 11: تحديات المهندسين الصغار (ENGINEERING CHALLENGES)
+         ==================================================================== -->
+    <section class="section-wrapper" id="challenges" style="background:#ffffff;">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">🏆 مستويات التحدي</span>
+          <h2 class="section-title">تحديات المهندسين والمبتكرين</h2>
+          <p class="section-desc">
+            بعد أن نجح مشروعك الأساسي، هل أنت مستعد لترقية منزلك إلى مستوى المحترفين؟ اختر تحديك القادم:
+          </p>
+        </div>
+
+        <div class="challenges-grid">
+          <!-- المستوى 1 -->
+          <div class="challenge-card level-1">
+            <div class="challenge-badge-top">
+              <span class="challenge-level-tag">المستوى 1</span>
+              <span>⭐</span>
+            </div>
+            <h3 class="challenge-title">مهندس مبتدئ</h3>
+            <p class="challenge-desc">
+              تشغيل النظام الأساسي: جعل الباب يفتح تلقائيًا للبطاقة المصرح بها، ويغلق بعد 3 ثوانٍ، ويرفض البطاقات الغريبة.
+            </p>
+            <div class="challenge-hint-box" style="display:none;">
+              💡 <strong>تلميح:</strong> هو نفس الكود المرفق في الدرس! فقط استبدل <code>REPLACE_ME</code> برقم بطاقتك.
+            </div>
+            <div class="challenge-footer">
+              <button class="btn btn-sm btn-secondary btn-toggle-hint">شاهد تلميح الأستاذ 💡</button>
+              <span class="badge badge-blue">مكتمل 🎯</span>
+            </div>
+          </div>
+
+          <!-- المستوى 2 -->
+          <div class="challenge-card level-2">
+            <div class="challenge-badge-top">
+              <span class="challenge-level-tag">المستوى 2</span>
+              <span>⭐⭐</span>
+            </div>
+            <h3 class="challenge-title">مطوّر برمجيات</h3>
+            <p class="challenge-desc">
+              تعديل الكود لجعل مدة بقاء الباب مفتوحًا 5 ثوانٍ بدلاً من 3 ثوانٍ، أو إضافة بطاقة ثانية مصرح بها (مثلاً لأخيك الصغير!).
+            </p>
+            <div class="challenge-hint-box" style="display:none;">
+              💡 <strong>تلميح:</strong> عدّل <code>delay(3000);</code> إلى <code>delay(5000);</code>. ولإضافة بطاقة ثانية استخدم المعامل المنطقي: <code>if (uid == CARD1 || uid == CARD2)</code>.
+            </div>
+            <div class="challenge-footer">
+              <button class="btn btn-sm btn-secondary btn-toggle-hint">شاهد تلميح الأستاذ 💡</button>
+              <span class="badge badge-amber">تحدي برمجي 💻</span>
+            </div>
+          </div>
+
+          <!-- المستوى 3 -->
+          <div class="challenge-card level-3">
+            <div class="challenge-badge-top">
+              <span class="challenge-level-tag">المستوى 3</span>
+              <span>⭐⭐⭐</span>
+            </div>
+            <h3 class="challenge-title">مهندس إلكترونيات</h3>
+            <p class="challenge-desc">
+              إضافة LED أخضر يضيء عند قبول الدخول، وLED أحمر يضيء عند رفض البطاقة، لحماية بصرية واضحة للمنزل.
+            </p>
+            <div class="challenge-hint-box" style="display:none;">
+              💡 <strong>تلميح:</strong> وصل موجب الـ LED الأخضر بمنفذ D7 والأحمر بمنفذ D8 (عبر مقاومة 220Ω لكل منهما)، واستخدم <code>digitalWrite(GREEN_LED, HIGH);</code> في الكود.
+            </div>
+            <div class="challenge-footer">
+              <button class="btn btn-sm btn-secondary btn-toggle-hint">شاهد تلميح الأستاذ 💡</button>
+              <span class="badge badge-green">إلكتروني 💡</span>
+            </div>
+          </div>
+
+          <!-- المستوى 4 -->
+          <div class="challenge-card level-4">
+            <div class="challenge-badge-top">
+              <span class="challenge-level-tag">المستوى 4</span>
+              <span>⭐⭐⭐⭐</span>
+            </div>
+            <h3 class="challenge-title">مبتكر ذكي</h3>
+            <p class="challenge-desc">
+              إضافة جرس Buzzer يصدر نغمة ترحيب مبهجة عند القبول وصفارة تحذير عند الرفض، أو ربط شاشة LCD لعرض اسم صاحب البطاقة!
+            </p>
+            <div class="challenge-hint-box" style="display:none;">
+              💡 <strong>تلميح:</strong> استخدم دالة <code>tone(BUZZER_PIN, 1000, 200);</code> لإصدار نغمات بترددات مختلفة تناسب كل حالة.
+            </div>
+            <div class="challenge-footer">
+              <button class="btn btn-sm btn-secondary btn-toggle-hint">شاهد تلميح الأستاذ 💡</button>
+              <span class="badge badge-blue">ابتكار متقدم 🚀</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ====================================================================
+         القسم 12: اختبار المعلومات الذكي (KNOWLEDGE CHECK QUIZ)
+         ==================================================================== -->
+    <section class="section-wrapper" id="quiz">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">🧠 اختبر معلوماتك</span>
+          <h2 class="section-title">مسابقة المهندس الذكي السريعة</h2>
+          <p class="section-desc">
+            أجب عن الأسئلة الخمسة للتأكد من فهمك العميق لمنطق النظام قبل الانتقال للحصة القادمة:
+          </p>
+        </div>
+
+        <div class="quiz-container">
+          <div class="quiz-header-status">
+            <span style="font-weight:800; color:var(--text-secondary);">اختبر معلوماتك في 5 أسئلة:</span>
+            <span class="quiz-score-badge" id="quizScoreBadge">النتيجة: 0 من 5</span>
+          </div>
+
+          <div id="quizQuestionsContainer">
+            <!-- يتم توليد الأسئلة ديناميكياً مع التغذية الراجعة عبر JavaScript -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ====================================================================
+         القسم 13: نصائح الأستاذ خليل (TEACHER KHALIL'S TIPS)
+         ==================================================================== -->
+    <section class="section-wrapper" id="teacher" style="background:#ffffff;">
+      <div class="container">
+        <div class="teacher-khalil-card">
+          <div class="teacher-khalil-header">
+            <div class="teacher-avatar-badge">👨‍🏫</div>
+            <div class="teacher-title">
+              <h3>نصائح وتوجيهات الأستاذ خليل</h3>
+              <p>كلمات من القلب لكل مهندس ومخترع صغير في ورشتنا</p>
+            </div>
+          </div>
+
+          <div class="teacher-tips-grid">
+            <div class="tips-subgroup">
+              <h4>💡 نصائح ذهبية أثناء التجربة:</h4>
+              <ul class="tips-checklist">
+                <li>افهم الفكرة قبل أن تحفظ الكود.</li>
+                <li>اختبر كل جزء بمفرده على الطاولة قبل دمجه مع بقية المكونات داخل المنزل.</li>
+                <li>عندما يحدث خطأ، ابحث عن السبب بنظام بدل تغيير جميع المكونات دفعة واحدة.</li>
+                <li>لا تحفظ الكود فقط؛ بل افهم الوظيفة التي يؤديها كل سطر برمجي.</li>
+                <li>اختبر دائمًا البطاقة المقبولة والبطاقة المرفوضة للتأكد من أمان النظام.</li>
+              </ul>
+            </div>
+
+            <div class="tips-subgroup">
+              <h4>🚀 نصائح في رحلتك نحو الابتكار:</h4>
+              <ul class="tips-checklist">
+                <li>كن فضوليًا واسأل دائمًا: كيف يعمل هذا الشيء؟ ولماذا صُمم هكذا؟</li>
+                <li>لا تخف إطلاقًا من الخطأ؛ فكل محاولة فاشلة هي خطوة تقربك من الحل الحقيقي.</li>
+                <li>فكّر بنفسك أولًا، ثم استخدم الأدوات والمراجع التي تساعدك على الوصول للهدف.</li>
+                <li>لا تقارن نفسك بالآخرين؛ ركز دائمًا على أن تصبح اليوم أفضل مما كنت عليه بالأمس!</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="teacher-quote-box">
+            <p class="teacher-quote-text">
+              «أنا لا أريد منك أن تتعلم البرمجة فقط، بل أن تصبح قادرًا على التفكير، وحل المشكلات، وتحويل أفكارك إلى اختراعات حقيقية. ربما يكون اختراعك القادم هو الذي لم يفكر فيه أحد من قبلك!»
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ====================================================================
+         القسم 14: وسام الإنجاز والشهادة (FINAL ACHIEVEMENT)
+         ==================================================================== -->
+    <section class="section-wrapper" id="achievement">
+      <div class="container">
+        <div class="achievement-card">
+          <div class="achievement-icon">🏆</div>
+          <h2 class="achievement-title">مبروك! لقد بنيت بابًا ذكيًا!</h2>
+          <p class="achievement-desc">
+            لقد أكملت ورشة المنزل الذكي بنجاح باهر؛ وفهمت كيف تتكامل الدوائر والبرمجة والميكانيكا. اكتب اسمك الآن لاستلام وطباعة شهادة التميز الخاصة بك!
+          </p>
+
+          <!-- مولد الشهادة التفاعلي -->
+          <div class="certificate-generator">
+            <h4 style="font-size:1.05rem; font-weight:800; margin-bottom:0.8rem;">
+              ✍️ أدخل اسم الطالب لإصدار شهادة إتمام الورشة:
+            </h4>
+            <div class="cert-input-row">
+              <input type="text" id="certStudentNameInput" class="cert-name-input" placeholder="اكتب اسمك الكامل هنا...">
+              <button class="btn btn-primary" id="certGenBtn">إصدار الشهادة 🎓</button>
+            </div>
+          </div>
+
+          <!-- معاينة الشهادة الجاهزة للطباعة -->
+          <div class="certificate-preview" id="certPreview">
+            <div class="badge badge-amber" style="margin-bottom:1rem;">شهادة إتمام ورشة هندسية معتمدة</div>
+            <h3 class="cert-title-badge">شهادة تميز في الابتكار والتطوير الإلكتروني</h3>
+            <p>تشهد ورشة الأستاذ خليل لتعليم الإلكترونيات والبرمجة بأن المهندس(ة) المبدع(ة):</p>
+            <div class="cert-student-name" id="certDisplayName">اسم الطالب</div>
+            <p class="cert-body-text">
+              قد أتم بنجاح واقتدار تصميم وبرمجة وبناء مشروع <strong>«المنزل الذكي: الباب الأوتوماتيكي بتقنية RFID ومحرك السيرفو مع أردوينو»</strong> وأظهر تفوقاً ملحوظاً في التفكير المنطقي والعمل الهندسي وحل المشكلات.
+            </p>
+
+            <div class="cert-signatures">
+              <div class="cert-sig">
+                <h5>الأستاذ خليل</h5>
+                <p>مدرّب الأردوينو والإلكترونيات</p>
+              </div>
+              <div class="cert-sig">
+                <h5>تاريخ الإنجاز</h5>
+                <p id="certDisplayDate">29 أكتوبر 2026</p>
+              </div>
+            </div>
+
+            <div style="margin-top:2rem;">
+              <button class="btn btn-sm btn-primary" id="printCertBtn">🖨️ طباعة الشهادة الورقية</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  
+    <!-- بطاقة الانتقال لمشروع الأسبوع الماضي -->
+    <div class="container" style="margin-top: 3rem; margin-bottom: 2rem;">
+      <div style="background: linear-gradient(135deg, #0f172a, #1e293b); color: white; border-radius: 16px; padding: 1.5rem 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; border: 1px solid #334155;">
+        <div>
+          <span style="color: #10b981; font-size: 0.85rem; font-weight: 700;">مشروع الأسبوع الماضي — الأسبوع 1 ✅</span>
+          <h3 style="font-size: 1.25rem; font-weight: 800; margin-top: 0.3rem;">لعبة سلك الإنذار والتركيز مع الجرس ⚡</h3>
+          <p style="color: #94a3b8; font-size: 0.9rem; margin-top: 0.2rem;">راجع الدائرة الكهربائية ومفهوم INPUT_PULLUP وكود حساب لمسات الخطأ ونغمات tone().</p>
+        </div>
+        <div>
+          <a href="../buzzer-wire-game/index.html" class="btn btn-secondary" style="background: white; color: #0f172a;">
+            <span>مراجعة درس سلك الإنذار</span> ➔
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- التذييل (FOOTER) -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <h3>🏠 ورشة المنزل الذكي مع أردوينو</h3>
+          <p>
+            منصة تعليمية تفاعلية مخصصة للأطفال والناشئين، مصممة لتحويل حصص أردوينو العملية مع الأستاذ خليل إلى مغامرة هندسية شيقة تبني جيل المخترعين القادم.
+          </p>
+        </div>
+
+        <div class="footer-links">
+          <h4>أقسام الدرس السريعة</h4>
+          <ul>
+            <li><a href="#simulation">محاكاة الباب الذكي</a></li>
+            <li><a href="#components">مستكشف المكونات</a></li>
+            <li><a href="#wiring">مخطط التوصيلات</a></li>
+            <li><a href="#code">كود أردوينو الكامل</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-links">
+          <h4>المراجع التقنية للأستاذ</h4>
+          <ul>
+            <li><a href="https://github.com/MajenkoLibraries/MFRC522" target="_blank" rel="noopener">مكتبة MFRC522 (GitHub)</a></li>
+            <li><a href="https://github.com/arduino-libraries/Servo" target="_blank" rel="noopener">مكتبة Servo (Arduino)</a></li>
+            <li><a href="#safety">إرشادات الأمان والجهد 3.3V</a></li>
+            <li><a href="#troubleshooting">دليل تشخيص الأعطال</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>جميع الحقوق محفوظة © ورشة الأستاذ خليل لتعليم الإلكترونيات والبرمجة للأطفال | صُمم بشغف هندسي فائق</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ملف جافاسكريبت التفاعلي -->
+  <script src="../../js/app.js"></script>
+</body>
+</html>

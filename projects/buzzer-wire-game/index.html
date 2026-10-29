@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="مشروع لعبة سلك الإنذار والتركيز مع أردوينو والجرس - درس الأسبوع الماضي من ورشة الأستاذ خليل">
+  <title>لعبة سلك الإنذار والتركيز | Buzz Wire Game - ورشة الأستاذ خليل</title>
+
+  <!-- ورقة الأنماط الرئيسية -->
+  <link rel="stylesheet" href="../../css/style.css">
+
+  <style>
+    /* تنسيقات معرض صور وفيديوهات الحصة */
+    .galery-block {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      box-shadow: var(--shadow-sm);
+    }
+    .galery-block-header {
+      margin-bottom: 1.25rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .galery-block-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+    .galery-block-icon {
+      font-size: 1.3rem;
+    }
+    .galery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+      gap: 1rem;
+    }
+    .galery-grid--video {
+      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+    }
+    .galery-card {
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-subtle);
+      transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+      cursor: pointer;
+    }
+    .galery-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lift);
+      border-color: var(--color-primary);
+    }
+    .galery-img-wrap {
+      position: relative;
+      aspect-ratio: 4 / 3;
+      overflow: hidden;
+    }
+    .galery-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform var(--transition-normal);
+    }
+    .galery-card:hover .galery-img {
+      transform: scale(1.05);
+    }
+    .galery-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(2, 132, 199, 0);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background var(--transition-normal);
+    }
+    .galery-card:hover .galery-overlay {
+      background: rgba(2, 132, 199, 0.35);
+    }
+    .galery-zoom {
+      color: #fff;
+      font-size: 0.9rem;
+      font-weight: 800;
+      background: var(--color-primary);
+      padding: 0.45rem 1rem;
+      border-radius: var(--radius-full);
+      opacity: 0;
+      transform: scale(0.85);
+      transition: opacity var(--transition-normal), transform var(--transition-normal);
+      box-shadow: var(--shadow-md);
+    }
+    .galery-card:hover .galery-zoom {
+      opacity: 1;
+      transform: scale(1);
+    }
+    .galery-card--video {
+      cursor: default;
+    }
+    .galery-card--video:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+    }
+    .galery-vid-wrap {
+      aspect-ratio: 16 / 9;
+      overflow: hidden;
+      background: #000;
+    }
+    .galery-vid {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .galery-vid-label {
+      padding: 0.65rem 0.85rem;
+      background: var(--bg-surface);
+      border-top: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    /* نافذة المعاينة المكبرة Lightbox */
+    #galery-lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 9000;
+      align-items: center;
+      justify-content: center;
+    }
+    #galery-lightbox.open {
+      display: flex;
+    }
+    .lightbox-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.88);
+      cursor: zoom-out;
+      backdrop-filter: blur(4px);
+    }
+    .lightbox-content {
+      position: relative;
+      z-index: 1;
+      max-width: 92vw;
+      max-height: 92vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .lightbox-img {
+      max-width: 92vw;
+      max-height: 88vh;
+      border-radius: var(--radius-md);
+      box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+      display: block;
+    }
+    .lightbox-close {
+      position: fixed;
+      top: 1.2rem;
+      left: 1.5rem;
+      background: white;
+      border: none;
+      border-radius: var(--radius-full);
+      width: 44px;
+      height: 44px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-md);
+      color: var(--text-primary);
+      font-weight: 800;
+      transition: background var(--transition-fast);
+      z-index: 2;
+    }
+    .lightbox-close:hover {
+      background: var(--color-danger-light);
+      color: var(--color-danger);
+    }
+
+    @media (max-width: 640px) {
+      .galery-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      }
+      .galery-grid--video {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- شريط التنقل بين أسابيع ورشات الأستاذ خليل -->
+  <div class="curriculum-top-bar" style="background: #0f172a; color: #f8fafc; padding: 0.5rem 1rem; font-size: 0.85rem; border-bottom: 1px solid #1e293b;">
+    <div class="container" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+      <div style="display: flex; align-items: center; gap: 0.75rem;">
+        <a href="../../index.html" style="color: #38bdf8; text-decoration: none; font-weight: 800; display: inline-flex; align-items: center; gap: 0.35rem;">
+          🏠 <span>بوابة ورشات الأستاذ خليل</span>
+        </a>
+        <span style="color: #64748b;">/</span>
+        <span style="color: #10b981; font-weight: 700;">الأسبوع 1: لعبة سلك الإنذار (الأسبوع الماضي) ✅</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 0.5rem;">
+        <a href="../rfid-smart-door/index.html" class="badge badge-amber" style="text-decoration: none; font-size: 0.82rem; font-weight: 800;">
+          <span>الانتقال لمشروع هذا الأسبوع (المنزل الذكي)</span> ➔
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <header class="header-nav">
+    <div class="reading-progress-bar" id="readingProgress"></div>
+    <div class="container nav-content">
+      <a href="../../index.html" class="nav-brand">
+        <div class="brand-icon">⚡</div>
+        <div class="brand-text">
+          <h1>لعبة سلك الإنذار والتركيز</h1>
+          <span>ورشة الأستاذ خليل — الأسبوع 1</span>
+        </div>
+      </a>
+
+      <nav class="nav-links">
+        <a href="#hero">المقدمة</a>
+        <a href="#galery">معرض الحصة 📸</a>
+        <a href="#components">المكونات</a>
+        <a href="#wiring">التوصيل</a>
+        <a href="#code">الكود البرمجي</a>
+        <a href="#teacher">الأستاذ خليل 👨‍🏫</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="btn-print" onclick="window.print()" title="طباعة الدليل الورقي للحصة">
+          🖨️ <span>طباعة الدليل</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ====================================================================
+         القسم 1: البطل / مقدمة سلك الإنذار
+         ==================================================================== -->
+    <section class="section-wrapper hero-section" id="hero">
+      <div class="container hero-grid">
+        <div class="hero-text-side">
+          <div class="hero-badge-wrap">
+            <span class="badge badge-green">مشروع الأسبوع الماضي المكتمل ✅</span>
+            <span class="badge badge-amber">إعداد الأستاذ خليل 👨‍🏫</span>
+          </div>
+
+          <h1 class="hero-title">
+            تحدي سلك <span class="highlight">الإنذار والتركيز!</span>
+          </h1>
+          <div class="hero-subtitle-en">BUZZ WIRE STEADY HAND GAME WITH ARDUINO</div>
+
+          <p class="hero-lead">
+            اصنع لعبة إلكترونية كلاسيكية تختبر ثبات يدك وتطلق صفارات التنبيه وأضواء الخطر عند ارتكاب أي خطأ!
+          </p>
+
+          <p class="hero-description">
+            في هذا المشروع الممتع الذي أنجزناه الأسبوع الماضي، تعلمنا كيف يحول <strong>أردوينو</strong> دائرة كهربائية بسيطة ومفتاح تلامس يدوي إلى نظام ألعاب رقمي ذكي؛ يراقب مسار السلك المعدني، ويطلق نغمة الإنذار الصوتي ويشعل ضوء التنبيه عند ملامسة الحلقة للمسار!
+          </p>
+
+          <div class="hero-cta-group">
+            <a href="#galery" class="btn btn-primary">
+              <span>شاهد معرض صور وفيديوهات الحصة</span> 📸
+            </a>
+            <a href="../rfid-smart-door/index.html" class="btn btn-secondary">
+              <span>مشروع هذا الأسبوع (المنزل الذكي)</span> 🏠
+            </a>
+          </div>
+
+          <div class="hero-highlights">
+            <div class="highlight-item">
+              <div class="highlight-icon">⏱️</div>
+              <div class="highlight-info">
+                <h4>45 دقيقة</h4>
+                <p>مدة الورشة العملية</p>
+              </div>
+            </div>
+            <div class="highlight-item">
+              <div class="highlight-icon">🎯</div>
+              <div class="highlight-info">
+                <h4>مبتدئ وممتع</h4>
+                <p>تحدٍ حركي وبرمجي</p>
+              </div>
+            </div>
+            <div class="highlight-item">
+              <div class="highlight-icon">🔊</div>
+              <div class="highlight-info">
+                <h4>مؤثرات صوتية</h4>
+                <p>تحكم بنغمات tone()</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-media-side">
+          <div class="hero-image-card">
+            <img 
+              src="../../assets/images/buzz_wire_infographic.jpg" 
+              alt="إنفوجرافيك ورشة الأستاذ خليل - مشروع لعبة سلك الإنذار والتركيز Buzz Wire Challenge" 
+              class="hero-main-photo"
+            >
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         القسم 2: معرض صور وفيديوهات الحصة الحقيقية
+         ==================================================================== -->
+    <section class="section-wrapper" id="galery" style="background: var(--bg-subtle);">
+      <div class="container">
+
+        <div class="section-header">
+          <span class="section-tag">📸 توثيق الحصة الحقيقية</span>
+          <h2 class="section-title">معرض لعبة سلك الإنذار والتركيز</h2>
+          <p class="section-desc">
+            صور وفيديوهات حقيقية من ورشة الأستاذ خليل — شاهد تجارب الطلاب وتطبيقهم العملي للعبة خطوة بخطوة!
+          </p>
+        </div>
+
+        <!-- معرض الصور -->
+        <div class="galery-block">
+          <div class="galery-block-header">
+            <h3 class="galery-block-title">
+              <span class="galery-block-icon">🖼️</span>
+              صور الحصة العملية
+              <span class="badge badge-blue">7 صور</span>
+            </h3>
+          </div>
+          <div class="galery-grid">
+          <div class="galery-card" onclick="openLightbox('../../assets/images/buzzer-galery/photo_2026-10-29_20-41-55.jpg')">
+            <div class="galery-img-wrap">
+              <img src="../../assets/images/buzzer-galery/photo_2026-10-29_20-41-55.jpg" alt="صورة 2 من حصة لعبة سلك الإنذار" loading="lazy" class="galery-img">
+              <div class="galery-overlay">
+                <span class="galery-zoom">🔍 تكبير الصورة</span>
+              </div>
+            </div>
+          </div>
+          <div class="galery-card" onclick="openLightbox('../../assets/images/buzzer-galery/photo_2026-10-29_20-41-59.jpg')">
+            <div class="galery-img-wrap">
+              <img src="../../assets/images/buzzer-galery/photo_2026-10-29_20-41-59.jpg" alt="صورة 3 من حصة لعبة سلك الإنذار" loading="lazy" class="galery-img">
+              <div class="galery-overlay">
+                <span class="galery-zoom">🔍 تكبير الصورة</span>
+              </div>
+            </div>
+          </div>
+          <div class="galery-card" onclick="openLightbox('../../assets/images/buzzer-galery/photo_2026-10-29_20-42-03.jpg')">
+            <div class="galery-img-wrap">
+              <img src="../../assets/images/buzzer-galery/photo_2026-10-29_20-42-03.jpg" alt="صورة 4 من حصة لعبة سلك الإنذار" loading="lazy" class="galery-img">
+              <div class="galery-overlay">
+                <span class="galery-zoom">🔍 تكبير الصورة</span>
+              </div>
+            </div>
+          </div>
+          <div class="galery-card" onclick="openLightbox('../../assets/images/buzzer-galery/photo_2026-10-29_20-42-07.jpg')">
+            <div class="galery-img-wrap">
+              <img src="../../assets/images/buzzer-galery/photo_2026-10-29_20-42-07.jpg" alt="صورة 5 من حصة لعبة سلك الإنذار" loading="lazy" class="galery-img">
+              <div class="galery-overlay">
+                <span class="galery-zoom">🔍 تكبير الصورة</span>
+              </div>
+            </div>
+          </div>
+          <div class="galery-card" onclick="openLightbox('../../assets/images/buzzer-galery/photo_2026-10-29_20-42-13.jpg')">
+            <div class="galery-img-wrap">
+              <img src="../../assets/images/buzzer-galery/photo_2026-10-29_20-42-13.jpg" alt="صورة 6 من حصة لعبة سلك الإنذار" loading="lazy" class="galery-img">
+              <div class="galery-overlay">
+                <span class="galery-zoom">🔍 تكبير الصورة</span>
+              </div>
+            </div>
+          </div>
+          <div class="galery-card" onclick="openLightbox('../../assets/images/buzzer-galery/photo_2026-10-29_20-42-17.jpg')">
+            <div class="galery-img-wrap">
+              <img src="../../assets/images/buzzer-galery/photo_2026-10-29_20-42-17.jpg" alt="صورة 7 من حصة لعبة سلك الإنذار" loading="lazy" class="galery-img">
+              <div class="galery-overlay">
+                <span class="galery-zoom">🔍 تكبير الصورة</span>
+              </div>
+            </div>
+          </div>
+          </div>
+        </div>
+
+        <!-- معرض الفيديوهات -->
+        <div class="galery-block" style="margin-top: 2.5rem;">
+          <div class="galery-block-header">
+            <h3 class="galery-block-title">
+              <span class="galery-block-icon">🎥</span>
+              فيديوهات الحصة وتجربة التحدي
+              <span class="badge badge-green">5 فيديوهات</span>
+            </h3>
+          </div>
+          <div class="galery-grid galery-grid--video">
+          <div class="galery-card galery-card--video">
+            <div class="galery-vid-wrap">
+              <video src="../../assets/videos/buzzer-galery/video_2026-10-29_20-42-22.mp4" controls preload="metadata" class="galery-vid"></video>
+            </div>
+            <div class="galery-vid-label">
+              <span class="badge badge-green">🎥 فيديو تجربة الطلاب 1</span>
+            </div>
+          </div>
+          <div class="galery-card galery-card--video">
+            <div class="galery-vid-wrap">
+              <video src="../../assets/videos/buzzer-galery/video_2026-10-29_20-42-34.mp4" controls preload="metadata" class="galery-vid"></video>
+            </div>
+            <div class="galery-vid-label">
+              <span class="badge badge-green">🎥 فيديو تجربة الطلاب 2</span>
+            </div>
+          </div>
+          <div class="galery-card galery-card--video">
+            <div class="galery-vid-wrap">
+              <video src="../../assets/videos/buzzer-galery/video_2026-10-29_20-42-38.mp4" controls preload="metadata" class="galery-vid"></video>
+            </div>
+            <div class="galery-vid-label">
+              <span class="badge badge-green">🎥 فيديو تجربة الطلاب 3</span>
+            </div>
+          </div>
+          <div class="galery-card galery-card--video">
+            <div class="galery-vid-wrap">
+              <video src="../../assets/videos/buzzer-galery/video_2026-10-29_20-42-42.mp4" controls preload="metadata" class="galery-vid"></video>
+            </div>
+            <div class="galery-vid-label">
+              <span class="badge badge-green">🎥 فيديو تجربة الطلاب 4</span>
+            </div>
+          </div>
+          <div class="galery-card galery-card--video">
+            <div class="galery-vid-wrap">
+              <video src="../../assets/videos/buzzer-galery/video_2026-10-29_20-42-49.mp4" controls preload="metadata" class="galery-vid"></video>
+            </div>
+            <div class="galery-vid-label">
+              <span class="badge badge-green">🎥 فيديو تجربة الطلاب 5</span>
+            </div>
+          </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Lightbox لعرض الصور بالحجم الكبير -->
+      <div id="galery-lightbox" role="dialog" aria-modal="true" aria-label="عرض الصورة بحجم كامل">
+        <div class="lightbox-backdrop" onclick="closeLightbox()"></div>
+        <div class="lightbox-content">
+          <button class="lightbox-close" onclick="closeLightbox()" aria-label="إغلاق">✕</button>
+          <img id="lightbox-img" src="" alt="" class="lightbox-img">
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         القسم 3: المكونات الإلكترونية
+         ==================================================================== -->
+    <section class="section-wrapper" id="components" style="background:#ffffff;">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">🧰 أدوات وقطع المشروع</span>
+          <h2 class="section-title">المكونات الإلكترونية للعبة</h2>
+          <p class="section-desc">
+            القطع التي استخدمها الطلاب في ورشة العمل لصنع دارة سلك الإنذار:
+          </p>
+        </div>
+
+        <div class="components-grid">
+          <!-- أردوينو -->
+          <div class="component-card">
+            <div class="component-img-wrap">
+              <span class="badge badge-blue component-badge">العقل 🧠</span>
+              <img src="../../assets/images/arduino_uno_real.jpg" alt="Arduino Uno" class="component-img">
+            </div>
+            <div class="component-body">
+              <div class="component-titles">
+                <h3 class="component-name-ar">Arduino Uno</h3>
+                <span class="component-name-en">المتحكم الدقيق</span>
+              </div>
+              <div class="component-role">
+                <strong>دوره:</strong> قراءة إشارة الحلقة المعدنية على المنفذ D2 والتحكم الفوري في تشغيل مصباح التنبيه وجرس الإنذار عند التلامس.
+              </div>
+            </div>
+          </div>
+
+          <!-- الجرس -->
+          <div class="component-card">
+            <div class="component-img-wrap">
+              <span class="badge badge-amber component-badge">الصوت 🔊</span>
+              <img src="../../assets/images/buzzer_real.jpg" alt="Piezo Buzzer" class="component-img">
+            </div>
+            <div class="component-body">
+              <div class="component-titles">
+                <h3 class="component-name-ar">جرس الإنذار (Buzzer)</h3>
+                <span class="component-name-en">الإنذار الصوتي</span>
+              </div>
+              <div class="component-role">
+                <strong>دوره:</strong> متصل بالمنفذ D8؛ يطلق نغمة بتردد 1000Hz بمجرد ملامسة الحلقة للمسار النحاسي.
+              </div>
+            </div>
+          </div>
+
+          <!-- مصباح LED -->
+          <div class="component-card">
+            <div class="component-img-wrap">
+              <span class="badge badge-green component-badge">الضوء 💡</span>
+              <img src="../../assets/images/led_real.jpg" alt="LED Red" class="component-img">
+            </div>
+            <div class="component-body">
+              <div class="component-titles">
+                <h3 class="component-name-ar">مصباح LED ومقاومة 220Ω</h3>
+                <span class="component-name-en">مؤشر بصري</span>
+              </div>
+              <div class="component-role">
+                <strong>دوره:</strong> متصل بالمنفذ D7؛ يضيء باللون الأحمر فور وقوع خطأ التلامس لحماية العين وتنبيه اللاعب.
+              </div>
+            </div>
+          </div>
+
+          <!-- سلك النحاس والحلقة -->
+          <div class="component-card">
+            <div class="component-img-wrap">
+              <span class="badge badge-blue component-badge">المسار ➰</span>
+              <img src="../../assets/images/loop_wand_real.jpg" alt="الحلقة المعدنية والسلك المتعرج" class="component-img">
+            </div>
+            <div class="component-body">
+              <div class="component-titles">
+                <h3 class="component-name-ar">سلك المسار النحاسي والحلقة</h3>
+                <span class="component-name-en">Copper Track & Ring</span>
+              </div>
+              <div class="component-role">
+                <strong>دوره:</strong> المسار موصول بـ GND، والحلقة موصولة بالمنفذ D2؛ وعند التلامس تكتمل الدارة الكهربائية.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         القسم 4: التوصيلات الكهربائية (WIRING)
+         ==================================================================== -->
+    <section class="section-wrapper" id="wiring" style="background: var(--bg-subtle);">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">🔌 طريقة التوصيل المعتمدة</span>
+          <h2 class="section-title">مخطط وجدول توصيل الدارة الكهربائية</h2>
+          <p class="section-desc">
+            توصيل مباشر وبسيط يعتمد على غلق الدارة وتوصيل المنفذ بالأرضي GND عند التلامس:
+          </p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: start;">
+          <!-- جدول التوصيل -->
+          <div class="pinout-table-card">
+            <div class="table-header">
+              <h4>جدول توصيلات لعبة سلك الإنذار</h4>
+            </div>
+            <table class="interactive-table">
+              <thead>
+                <tr>
+                  <th>المكون</th>
+                  <th>منفذ Arduino</th>
+                  <th>طريقة التوصيل</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>المسار النحاسي المتعرج</strong></td>
+                  <td><strong>GND</strong></td>
+                  <td>سكة الأرضي في لوح التجارب Breadboard</td>
+                </tr>
+                <tr>
+                  <td><strong>الحلقة المعدنية (المقبض)</strong></td>
+                  <td><strong>D2</strong></td>
+                  <td>سلك مرن معزول مع خاصية <code>INPUT_PULLUP</code></td>
+                </tr>
+                <tr>
+                  <td><strong>مصباح LED (الطرف الطويل +)</strong></td>
+                  <td><strong>D7</strong></td>
+                  <td>عبر مقاومة حماية 220Ω</td>
+                </tr>
+                <tr>
+                  <td><strong>مصباح LED (الطرف القصير -)</strong></td>
+                  <td><strong>GND</strong></td>
+                  <td>سكة الأرضي المشتركة</td>
+                </tr>
+                <tr>
+                  <td><strong>جرس الإنذار Buzzer (+)</strong></td>
+                  <td><strong>D8</strong></td>
+                  <td>المنفذ الرقمي للتحكم بالتردد <code>tone()</code></td>
+                </tr>
+                <tr>
+                  <td><strong>جرس الإنذار Buzzer (-)</strong></td>
+                  <td><strong>GND</strong></td>
+                  <td>سكة الأرضي المشتركة</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- الشرح والتنبيهات -->
+          <div style="display:flex; flex-direction:column; gap:1.25rem;">
+            <div style="background:white; border-radius:var(--radius-lg); padding:1.5rem; border:1px solid var(--border-medium); box-shadow:var(--shadow-sm);">
+              <h4 style="font-size:1.15rem; font-weight:800; color:var(--color-primary); margin-bottom:0.8rem;">
+                🧠 كيف تعمل فكرة التلامس (INPUT_PULLUP)؟
+              </h4>
+              <p style="font-size:0.95rem; color:var(--text-secondary); line-height:1.7; margin-bottom:1rem;">
+                عند تفعيل <code>INPUT_PULLUP</code> للمنفذ D2، يرفع الأردوينو الجهد داخلياً إلى 5V وتكون الحالة <strong>HIGH</strong> ما دامت الحلقة في الهواء بعيدة عن المسار.
+              </p>
+              <p style="font-size:0.95rem; color:var(--text-secondary); line-height:1.7;">
+                بمجرد أن تلمس الحلقة المسار النحاسي الموصول بـ <strong>GND</strong>، يكتمل الاتصال بالأرضي فوراً وتهبط القيمة إلى <strong>LOW</strong>، فيطلق الأردوينو الإنذار الصوتي والضوئي بالملي ثانية!
+              </p>
+            </div>
+
+            <div style="background:#fffbeb; border-right:4px solid #f59e0b; border-radius:var(--radius-md); padding:1.25rem; border:1px solid #fde68a;">
+              <h5 style="color:#b45309; font-weight:800; font-size:1rem; margin-bottom:0.4rem;">⚠️ تنبيهات هامة للسلامة:</h5>
+              <ul style="color:#78350f; font-size:0.9rem; line-height:1.7; padding-right:1.2rem; margin:0;">
+                <li>لا توصل المسار النحاسي أبداً بجهد 5V تجنباً لقصر الدارة الكهربائية.</li>
+                <li>افصل كابل USB دائماً قبل تغيير أي سلك على لوح التجارب.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         القسم 5: كود أردوينو الكامل (ARDUINO CODE)
+         ==================================================================== -->
+    <section class="section-wrapper" id="code" style="background:#ffffff;">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">💻 كود أردوينو المعتمد</span>
+          <h2 class="section-title">برنامج لعبة سلك الإنذار الكامل</h2>
+          <p class="section-desc">
+            كود الدرس كما شرحه الأستاذ خليل، منظم وسهل القراءة مع تعليقات عربية:
+          </p>
+        </div>
+
+        <div class="code-viewer-card" style="max-width:850px; margin:0 auto;">
+          <div class="code-header">
+            <div class="code-file-badge">
+              <span>📄 BuzzWireGame.ino</span>
+            </div>
+            <div class="code-actions">
+              <button class="btn-copy-code" onclick="navigator.clipboard.writeText(document.getElementById('buzzSourceCode').innerText); alert('✅ تم نسخ كود لعبة سلك الإنذار بنجاح!');">
+                📋 <span>نسخ الكود</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="code-pre-wrap">
+            <pre><code id="buzzSourceCode"><span class="code-token-comment">// Arduino Quest - Buzz Wire Challenge</span>
+
+<span class="code-token-comment">// تحديد منافذ المكونات</span>
+<span class="code-token-kw">const</span> <span class="code-token-type">int</span> sensorPin  = <span class="code-token-num">2</span>;
+<span class="code-token-kw">const</span> <span class="code-token-type">int</span> ledPin     = <span class="code-token-num">7</span>;
+<span class="code-token-kw">const</span> <span class="code-token-type">int</span> buzzerPin  = <span class="code-token-num">8</span>;
+
+<span class="code-token-type">void</span> <span class="code-token-fn">setup</span>() &#123;
+  <span class="code-token-comment">// إعداد المنافذ</span>
+  <span class="code-token-fn">pinMode</span>(sensorPin, INPUT_PULLUP);
+  <span class="code-token-fn">pinMode</span>(ledPin,    OUTPUT);
+  <span class="code-token-fn">pinMode</span>(buzzerPin, OUTPUT);
+&#125;
+
+<span class="code-token-type">void</span> <span class="code-token-fn">loop</span>() &#123;
+  <span class="code-token-comment">// قراءة حالة الحلقة المعدنية</span>
+  <span class="code-token-type">int</span> state = <span class="code-token-fn">digitalRead</span>(sensorPin);
+
+  <span class="code-token-comment">// التحقق من حدوث التلامس</span>
+  <span class="code-token-kw">if</span> (state == LOW) &#123;
+    <span class="code-token-comment">// الحلقة تلامس المسار النحاسي</span>
+    <span class="code-token-fn">digitalWrite</span>(ledPin, HIGH);
+    <span class="code-token-fn">tone</span>(buzzerPin, <span class="code-token-num">1000</span>);
+  &#125; <span class="code-token-kw">else</span> &#123;
+    <span class="code-token-comment">// الحلقة لا تلامس المسار النحاسي</span>
+    <span class="code-token-fn">digitalWrite</span>(ledPin, LOW);
+    <span class="code-token-fn">noTone</span>(buzzerPin);
+  &#125;
+&#125;
+
+
+<span class="code-token-comment">/*
+طريقة تركيب الدارة:
+1. GND → المسار النحاسي وسكة الأرضي في Breadboard.
+2. D2  → الحلقة المعدنية بسلك مرن معزول.
+3. D7  → مقاومة 220Ω → الطرف الطويل لـ LED.
+         الطرف القصير لـ LED → GND.
+4. D8  → الطرف الموجب (+) للجرس السلبي.
+         الطرف السالب (-) للجرس → GND.
+
+تنبيه: لا توصل المسار النحاسي بـ 5V،
+وافصل USB قبل تغيير التوصيلات.
+*/</span></code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         بطاقة الانتقال لمشروع الأسبوع الحالي (المنزل الذكي)
+         ==================================================================== -->
+    <div class="container" style="margin-top: 3.5rem; margin-bottom: 3.5rem;">
+      <div style="background: linear-gradient(135deg, #0284c7, #0369a1); color: white; border-radius: var(--radius-xl); padding: 2rem 2.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem; box-shadow: var(--shadow-lg);">
+        <div>
+          <span class="badge" style="background: rgba(255,255,255,0.2); color:white; margin-bottom:0.5rem;">الأسبوع 2 الحالي 🟢</span>
+          <h3 style="font-size: 1.5rem; font-weight: 900; margin-bottom: 0.3rem;">مشروع المنزل الذكي: الباب الأوتوماتيكي بـ RFID 🏠</h3>
+          <p style="opacity: 0.95; font-size: 1rem; max-width: 600px;">
+            بعد أن أتقنت لعبة سلك الإنذار، انتقل إلى ورشة هذا الأسبوع لصنع منزل كرتوني متكامل يفتح بابه الذكي بمحرك السيرفو عند قراءة بطاقتك الخاصة!
+          </p>
+        </div>
+        <div>
+          <a href="../rfid-smart-door/index.html" class="btn btn-secondary" style="background: white; color: var(--color-primary-dark); font-size:1.05rem;">
+            <span>ادخل إلى ورشة هذا الأسبوع</span> ➔
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ====================================================================
+         قسم المشرف على الورشة: الأستاذ خليل
+         ==================================================================== -->
+    <section class="section-wrapper" id="teacher" style="background: #f0f9ff; border-top: 3px solid #0ea5e9;">
+      <div class="container">
+        <div style="display: flex; align-items: center; gap: 2rem; flex-wrap: wrap; justify-content: center; padding: 1rem 0;">
+          <div style="flex-shrink: 0;">
+            <img
+              src="../../assets/images/teacher_khalil.jpg"
+              alt="الأستاذ خليل — مدرّب ورشة أردوينو للأطفال"
+              style="width: 140px; height: 140px; border-radius: 50%; object-fit: cover; border: 4px solid #0ea5e9; box-shadow: 0 4px 20px rgba(14,165,233,0.25);"
+            >
+          </div>
+          <div style="max-width: 500px;">
+            <div style="font-size: 0.85rem; color: #0ea5e9; font-weight: 700; margin-bottom: 0.4rem; letter-spacing: 0.05em;">المشرف على الورشة</div>
+            <h3 style="font-size: 1.5rem; color: #0f172a; margin: 0 0 0.5rem; font-weight: 900;">الأستاذ خليل 👨‍🏫</h3>
+            <p style="color: #475569; line-height: 1.7; margin: 0;">
+              مدرّب ورشات أردوينو والإلكترونيات العملية للأطفال. نؤمن بأن التعلم الحقيقي يبدأ عندما يمسك الطالب القطع بيديه ويحوّل الأفكار النظرية إلى ابتكارات ذكية تعمل على أرض الواقع!
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <h3>⚡ ورشة لعبة سلك الإنذار والتركيز</h3>
+          <p>
+            أحد مشاريع منهج أردوينو العملي للأطفال بإشراف الأستاذ خليل. تعلم الدوائر والتحكم بطريقة ممتعة ومحفزة للتفكير الهندسي.
+          </p>
+        </div>
+        <div class="footer-links">
+          <h4>التنقل السريع</h4>
+          <ul>
+            <li><a href="../../index.html">بوابة ورشات الأستاذ خليل</a></li>
+            <li><a href="../rfid-smart-door/index.html">مشروع المنزل الذكي الحالي 🏠</a></li>
+            <li><a href="#galery">معرض صور وفيديوهات الحصة</a></li>
+            <li><a href="#wiring">مخطط التوصيل الكهربائي</a></li>
+            <li><a href="#code">كود المشروع الكامل</a></li>
+          </ul>
+        </div>
+        <div class="footer-links">
+          <h4>قواعد الأمان</h4>
+          <ul>
+            <li>استخدام سلك معدني غير حاد الأطراف</li>
+            <li>استخدام مقاومة 220Ω مع مصباح LED</li>
+            <li>عدم توصيل السلك بمصادر طاقة عالية</li>
+            <li>فصل كابل USB قبل تعديل التوصيلات</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>جميع الحقوق محفوظة © ورشات الأستاذ خليل لتعليم الإلكترونيات للأطفال 2026</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- جافاسكريبت المعاينة المكبرة Lightbox -->
+  <script>
+    function openLightbox(src) {
+      const lb = document.getElementById('galery-lightbox');
+      document.getElementById('lightbox-img').src = src;
+      lb.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeLightbox() {
+      document.getElementById('galery-lightbox').classList.remove('open');
+      document.getElementById('lightbox-img').src = '';
+      document.body.style.overflow = '';
+    }
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeLightbox();
+    });
+  </script>
+</body>
+</html>

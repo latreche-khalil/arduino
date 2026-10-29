@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title id="templatePageTitle">قالب درس أردوينو جديد | ورشة الأستاذ خليل</title>
+  <link rel="stylesheet" href="../../css/style.css">
+  <style>
+    .template-badge-bar {
+      background: #eff6ff;
+      border: 1px dashed var(--color-primary);
+      border-radius: var(--radius-md);
+      padding: 1rem 1.5rem;
+      margin-bottom: 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- شريط التنقل بين أسابيع ورشات الأستاذ خليل -->
+  <div class="curriculum-top-bar" style="background: #0f172a; color: #f8fafc; padding: 0.5rem 1rem; font-size: 0.85rem; border-bottom: 1px solid #1e293b;">
+    <div class="container" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+      <div style="display: flex; align-items: center; gap: 0.75rem;">
+        <a href="../../index.html" style="color: #38bdf8; text-decoration: none; font-weight: 800; display: inline-flex; align-items: center; gap: 0.35rem;">
+          🏠 <span>بوابة ورشات الأستاذ خليل</span>
+        </a>
+        <span style="color: #64748b;">/</span>
+        <span style="color: #fbbf24; font-weight: 700;" id="curriculumBarTitle">قالب مشروع أسبوعي</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 0.5rem;">
+        <a href="../../projects/rfid-smart-door/index.html" style="color: #38bdf8; text-decoration: none; font-size: 0.82rem; font-weight: 700;">
+          ⬅️ الذهاب إلى مشروع الأسبوع 1 (المنزل الذكي)
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <header class="header-nav">
+    <div class="container nav-content">
+      <a href="../../index.html" class="nav-brand">
+        <div class="brand-icon">⚡</div>
+        <div class="brand-text">
+          <h1 id="navBrandTitle">مشروع الأسبوع القادم</h1>
+          <span>ورشة الأستاذ خليل للابتكار</span>
+        </div>
+      </a>
+      <div class="nav-actions">
+        <a href="../../index.html" class="btn btn-secondary btn-sm">العودة لجدول الحصص 📅</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container" style="padding-top: 3rem; padding-bottom: 5rem;">
+
+    <!-- شريط معلومات القالب -->
+    <div class="template-badge-bar" id="templateNotice">
+      <div>
+        <h4 style="color:var(--color-primary-dark); font-weight:800; margin-bottom:0.2rem;" id="noticeHeading">
+          🛠️ قالب المشروع الجديد (معاينة الدرس)
+        </h4>
+        <p style="font-size:0.88rem; color:var(--text-secondary);" id="noticeDesc">
+          هذا القالب مجهز للأستاذ خليل لإضافة مشاريع الحصص القادمة بسهولة تامة وبنفس التصميم التفاعلي الفاخر.
+        </p>
+      </div>
+      <div>
+        <span class="badge badge-amber" id="statusBadgeDisplay">حالة المشروع: قيد التجهيز ⏳</span>
+      </div>
+    </div>
+
+    <!-- قسم البطل للدرس الجديد -->
+    <div class="hero-image-card" style="margin-bottom: 3rem; padding: 2rem; background: white;">
+      <div style="max-width: 800px; margin: 0 auto; text-align: center;">
+        <span class="badge badge-blue" id="lessonWeekTag" style="margin-bottom: 1rem;">الأسبوع القادم 📅</span>
+        <h1 class="section-title" id="lessonMainTitle" style="font-size: 2.5rem;">نظام إشارات المرور الذكية مع حساس المشاة</h1>
+        <div class="hero-subtitle-en" id="lessonSubTitleEn">SMART TRAFFIC LIGHT SYSTEM</div>
+        <p class="section-desc" id="lessonDescriptionText" style="margin: 1.5rem auto 2rem; font-size: 1.15rem;">
+          سيقوم الطلاب في هذه الورشة ببرمجة إشارة مرور ثلاثية تحاكي شوارع المدن الذكية، مع زر طلب عبور المشاة ومؤقتات زمنية ذكية وجرس صوتي لتنبيه ذوي الاحتياجات الخاصة.
+        </p>
+
+        <div style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+          <a href="../../index.html" class="btn btn-secondary">
+            <span>تصفح كل المشاريع في المنصة</span> 📚
+          </a>
+          <a href="../../projects/rfid-smart-door/index.html" class="btn btn-primary">
+            <span>شاهد درس الأسبوع 1 المكتمل (المنزل الذكي)</span> 🚀
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- قائمة الأهداف التعليمية والمكونات للمشروع -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 3rem;">
+      <div style="background: white; border-radius: var(--radius-lg); padding: 1.8rem; border: 1px solid var(--border-subtle); box-shadow: var(--shadow-sm);">
+        <h3 style="font-size: 1.2rem; font-weight: 800; color: var(--color-primary); margin-bottom: 1rem;">
+          🎯 أهداف هذه الحصة:
+        </h3>
+        <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.75rem;" id="lessonGoalsList">
+          <li style="display:flex; align-items:center; gap:0.5rem; font-size:0.95rem;">
+            <span>✨</span> <span>فهم التحكم الزمني في إشارات المرور والمتغيرات البرمجية.</span>
+          </li>
+          <li style="display:flex; align-items:center; gap:0.5rem; font-size:0.95rem;">
+            <span>✨</span> <span>قراءة حالة الأزرار الرقمية (Digital Inputs) والتعامل مع المقاومات.</span>
+          </li>
+          <li style="display:flex; align-items:center; gap:0.5rem; font-size:0.95rem;">
+            <span>✨</span> <span>محاكاة تطبيقات الأمان والأنظمة الواقعية في المدن الذكية.</span>
+          </li>
+        </ul>
+      </div>
+
+      <div style="background: white; border-radius: var(--radius-lg); padding: 1.8rem; border: 1px solid var(--border-subtle); box-shadow: var(--shadow-sm);">
+        <h3 style="font-size: 1.2rem; font-weight: 800; color: var(--color-teal); margin-bottom: 1rem;">
+          🧰 المكونات المطلوبة في هذا الدرس:
+        </h3>
+        <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.75rem;" id="lessonComponentsList">
+          <li style="display:flex; align-items:center; gap:0.5rem; font-size:0.95rem;">
+            <span>🔹</span> <span>لوحة Arduino Uno مع كابل البرمجة USB</span>
+          </li>
+          <li style="display:flex; align-items:center; gap:0.5rem; font-size:0.95rem;">
+            <span>🔹</span> <span>ثلاثة مصابيح LED (أحمر، أصفر، أخضر) مع مقاومات 220Ω</span>
+          </li>
+          <li style="display:flex; align-items:center; gap:0.5rem; font-size:0.95rem;">
+            <span>🔹</span> <span>زر ضاغط (Push Button) مع مقاومة سحب 10kΩ</span>
+          </li>
+          <li style="display:flex; align-items:center; gap:0.5rem; font-size:0.95rem;">
+            <span>🔹</span> <span>جرس تنبيه Buzzer + لوحة توصيل وأسلاك</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- بطاقة نصيحة الأستاذ خليل للمشروع -->
+    <div class="teacher-khalil-card" style="padding: 2rem;">
+      <div style="display: flex; align-items: center; gap: 1rem;">
+        <div class="teacher-avatar-badge" style="width: 54px; height: 54px; font-size: 1.6rem;">👨‍🏫</div>
+        <div>
+          <h3 style="font-size: 1.2rem; font-weight: 800;">رسالة الأستاذ خليل قبل بدء هذا المشروع:</h3>
+          <p style="font-size: 0.9rem; color: var(--color-teal);">«استعدوا بتجربة أفكاركم، فكل أسبوع سنصنع اختراعًا جديدًا يحل مشكلة في العالم الحقيقي!»</p>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- سكربت قراءة بيانات المشروع من projects.json ديناميكياً -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const projectId = urlParams.get('project');
+
+      if (projectId) {
+        fetch('../../data/projects.json')
+          .then(res => res.json())
+          .then(projects => {
+            const currentProj = projects.find(p => p.id === projectId);
+            if (currentProj) {
+              document.title = `${currentProj.title} | ورشة الأستاذ خليل`;
+              document.getElementById('curriculumBarTitle').textContent = `الأسبوع ${currentProj.week}: ${currentProj.title}`;
+              document.getElementById('navBrandTitle').textContent = `الأسبوع ${currentProj.week}: ${currentProj.title}`;
+              document.getElementById('lessonWeekTag').textContent = `الأسبوع ${currentProj.week} — ${currentProj.statusLabel}`;
+              document.getElementById('lessonMainTitle').textContent = currentProj.title;
+              document.getElementById('lessonSubTitleEn').textContent = currentProj.titleEn;
+              document.getElementById('lessonDescriptionText').textContent = currentProj.summary;
+
+              // تحديث المكونات
+              if (currentProj.components && currentProj.components.length > 0) {
+                const compContainer = document.getElementById('lessonComponentsList');
+                compContainer.innerHTML = '';
+                currentProj.components.forEach(comp => {
+                  const li = document.createElement('li');
+                  li.style.cssText = 'display:flex; align-items:center; gap:0.5rem; font-size:0.95rem;';
+                  li.innerHTML = `<span>🔹</span> <span>${comp}</span>`;
+                  compContainer.appendChild(li);
+                });
+              }
+
+              // تحديث الأهداف
+              if (currentProj.learningGoals && currentProj.learningGoals.length > 0) {
+                const goalsContainer = document.getElementById('lessonGoalsList');
+                goalsContainer.innerHTML = '';
+                currentProj.learningGoals.forEach(g => {
+                  const li = document.createElement('li');
+                  li.style.cssText = 'display:flex; align-items:center; gap:0.5rem; font-size:0.95rem;';
+                  li.innerHTML = `<span>✨</span> <span>${g}</span>`;
+                  goalsContainer.appendChild(li);
+                });
+              }
+            }
+          })
+          .catch(err => console.log('Notice: Running offline or template mode', err));
+      }
+    });
+  </script>
+</body>
+</html>
