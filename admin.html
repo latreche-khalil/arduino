@@ -495,12 +495,12 @@
       </p>
 
       <form id="adminPinLoginForm">
-        <input type="password" maxlength="8" id="adminPinInput" class="gate-input" style="text-align: center; font-size: 1.6rem; letter-spacing: 6px; font-weight: 900; margin-bottom: 1rem;" placeholder="••••" autofocus required>
+        <input type="password" maxlength="12" id="adminPinInput" class="gate-input" style="text-align: center; font-size: 1.6rem; letter-spacing: 6px; font-weight: 900; margin-bottom: 1rem;" placeholder="••••" autofocus required>
         <button type="submit" class="gate-submit-btn" style="margin-top: 0.5rem;">
           <span>فتح لوحة التحكم</span> 🚀
         </button>
         <span id="adminLoginError" style="color: #dc2626; font-size: 0.85rem; display: none; margin-top: 0.75rem; font-weight: 700;">
-          ❌ الرمز غير صحيح! (الرمز الافتراضي: 1234)
+          ❌ الرمز السري غير صحيح! يرجى المحاولة مرة أخرى.
         </span>
       </form>
     </div>
@@ -644,7 +644,6 @@
               <tr>
                 <th style="width: 30px;">#</th>
                 <th>اسم التلميذ</th>
-                <th>الفوج / الصف</th>
                 <th>وقت الدخول</th>
                 <th style="text-align: center; width: 60px;">إجراء</th>
               </tr>
@@ -699,7 +698,7 @@
       // مفاتيح التخزين
       const STORAGE_ADMIN_AUTH = 'khalil_admin_logged';
       const STORAGE_CLASS_DATA = 'khalil_classroom_data';
-      const ADMIN_PIN = '1234'; // الرمز السري للأستاذ
+      const ADMIN_PIN = '142005'; // الرمز السري للأستاذ
 
       // إعدادات MQTT
       const MQTT_BROKER = 'wss://broker.emqx.io:8084/mqtt';
@@ -847,7 +846,7 @@
           card.innerHTML = `
             <div class="pending-info">
               <h4>${escapeHtml(student.name)}</h4>
-              <p>🏫 ${escapeHtml(student.group || 'عام')} | ⏱️ ${student.time || 'الآن'}</p>
+              <p>⏱️ وقت طلب الانضمام: ${student.time || 'الآن'}</p>
             </div>
             <div class="pending-actions">
               <button class="btn-action-admit" data-id="${student.id}" title="قبول التلميذ فوراً">
@@ -894,7 +893,6 @@
           tr.innerHTML = `
             <td style="color:#64748b; font-weight:700;">${index + 1}</td>
             <td style="font-weight:800; color:#0f172a;">${escapeHtml(std.name)}</td>
-            <td><span class="badge badge-blue" style="font-size:0.75rem;">${escapeHtml(std.group || 'عام')}</span></td>
             <td style="color:#64748b; font-size:0.85rem;">${std.time || 'الآن'}</td>
             <td style="text-align:center;">
               <button class="btn-action-reject" data-id="${std.id}" title="إخراج من الحصة" style="padding:0.25rem 0.5rem; font-size:0.75rem;">
@@ -1120,7 +1118,7 @@
           let text = `📋 كشف حضور ورشة الأستاذ خليل (${new Date().toLocaleDateString('ar-EG')}):\n`;
           text += `-------------------------------------------------\n`;
           classroom.approved.forEach((std, i) => {
-            text += `${i + 1}. ${std.name} (${std.group || 'عام'}) - دخل في: ${std.time || 'الآن'}\n`;
+            text += `${i + 1}. ${std.name} - دخل في: ${std.time || 'الآن'}\n`;
           });
           text += `-------------------------------------------------\nالمجموع: ${classroom.approved.length} تلميذاً.`;
 
@@ -1137,9 +1135,9 @@
             alert('قائمة الحضور فارغة حالياً!');
             return;
           }
-          let csv = 'الرقم,اسم التلميذ,الفوج,وقت الدخول\n';
+          let csv = 'الرقم,اسم التلميذ,وقت الدخول\n';
           classroom.approved.forEach((std, i) => {
-            csv += `${i + 1},"${std.name}","${std.group || 'عام'}","${std.time || ''}"\n`;
+            csv += `${i + 1},"${std.name}","${std.time || ''}"\n`;
           });
           const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' });
           const link = document.createElement('a');
@@ -1183,3 +1181,4 @@
   </script>
 </body>
 </html>
+

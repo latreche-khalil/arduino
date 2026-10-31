@@ -138,10 +138,7 @@
               <input type="text" id="gateStudentName" class="gate-input" placeholder="مثال: يوسف بن علي" required autocomplete="name" autofocus>
             </div>
 
-            <div class="gate-form-group">
-              <label class="gate-label" for="gateStudentGroup">الفوج أو الصف (اختياري) 🏫</label>
-              <input type="text" id="gateStudentGroup" class="gate-input" placeholder="مثال: الفوج 1 أو الصف الخامس">
-            </div>
+
 
             <button type="submit" class="gate-submit-btn" id="btnSubmitGate">
               <span>طلب الانضمام للحصة</span> 🚀
@@ -260,17 +257,14 @@
       regForm.addEventListener('submit', (e) => {
         e.preventDefault();
         const nameInp = document.getElementById('gateStudentName');
-        const groupInp = document.getElementById('gateStudentGroup');
-
         const name = nameInp ? nameInp.value.trim() : '';
-        const group = groupInp ? groupInp.value.trim() : '';
 
         if (name.length < 2) {
           alert('يرجى إدخال اسم التلميذ بشكل صحيح!');
           return;
         }
 
-        submitStudentRequest(name, group);
+        submitStudentRequest(name, '');
       });
     }
   }
@@ -533,3 +527,4 @@
   }
 
 })();
+
