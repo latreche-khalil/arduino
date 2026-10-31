@@ -1,0 +1,442 @@
+/* ==========================================================================
+   بوابة دخول التلاميذ وقبول الأستاذ خليل (CLASSROOM GATE & STUDENT ADMISSION)
+   ========================================================================== */
+
+:root {
+  --gate-primary: #0284c7;
+  --gate-primary-dark: #0369a1;
+  --gate-primary-light: #e0f2fe;
+  --gate-accent: #0d9488;
+  --gate-success: #16a34a;
+  --gate-warning: #f59e0b;
+  --gate-danger: #dc2626;
+  --gate-bg: rgba(15, 23, 42, 0.85);
+  --gate-card-bg: #ffffff;
+}
+
+/* شاشة الحظر الكاملة (OVERLAY) */
+.classroom-gate-overlay {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  background: var(--gate-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 999999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+  overflow-y: auto;
+  opacity: 1;
+  transition: opacity 0.4s ease, visibility 0.4s ease;
+  direction: rtl;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+.classroom-gate-overlay.gate-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* بطاقة نافذة البوابة (GATE CARD) */
+.classroom-gate-card {
+  background: var(--gate-card-bg);
+  width: 100%;
+  max-width: 520px;
+  border-radius: 24px;
+  padding: 2.25rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  animation: gateScaleIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes gateScaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.92) translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* الشريط العلوي الديكوري */
+.gate-top-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: linear-gradient(90deg, var(--gate-primary), #38bdf8, var(--gate-accent));
+}
+
+/* رأس البطاقة */
+.gate-header-icon {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  background: var(--gate-primary-light);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.25rem;
+  border: 4px solid #bae6fd;
+  box-shadow: 0 8px 16px rgba(2, 132, 199, 0.15);
+  position: relative;
+}
+
+.gate-header-icon img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.gate-header-icon .gate-status-dot {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #22c55e;
+  border: 3px solid white;
+}
+
+.gate-title {
+  font-size: 1.55rem;
+  font-weight: 900;
+  color: #0f172a;
+  margin: 0 0 0.4rem;
+  line-height: 1.3;
+}
+
+.gate-subtitle {
+  font-size: 0.95rem;
+  color: #64748b;
+  margin: 0 0 1.75rem;
+  line-height: 1.6;
+}
+
+/* الحقول والنماذج */
+.gate-form-group {
+  margin-bottom: 1.2rem;
+  text-align: right;
+}
+
+.gate-label {
+  display: block;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: #334155;
+  margin-bottom: 0.45rem;
+}
+
+.gate-input {
+  width: 100%;
+  padding: 0.85rem 1.1rem;
+  border-radius: 14px;
+  border: 2px solid #cbd5e1;
+  font-family: inherit;
+  font-size: 1rem;
+  background: #f8fafc;
+  color: #0f172a;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.gate-input:focus {
+  outline: none;
+  border-color: var(--gate-primary);
+  background: white;
+  box-shadow: 0 0 0 4px rgba(2, 132, 199, 0.15);
+}
+
+.gate-submit-btn {
+  width: 100%;
+  padding: 0.95rem 1.5rem;
+  border-radius: 14px;
+  border: none;
+  background: linear-gradient(135deg, var(--gate-primary), var(--gate-primary-dark));
+  color: white;
+  font-size: 1.05rem;
+  font-weight: 800;
+  font-family: inherit;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  box-shadow: 0 6px 18px rgba(2, 132, 199, 0.35);
+  transition: all 0.25s ease;
+  margin-top: 1.5rem;
+}
+
+.gate-submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(2, 132, 199, 0.45);
+}
+
+.gate-submit-btn:active {
+  transform: translateY(0);
+}
+
+/* وضع غرفة الانتظار (WAITING ROOM VIEW) */
+.gate-waiting-view {
+  display: none;
+  text-align: center;
+  padding: 1rem 0;
+}
+
+.gate-waiting-view.gate-active {
+  display: block;
+}
+
+.gate-radar-spinner {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #e0f2fe 0%, #bae6fd 60%, transparent 70%);
+  margin: 0 auto 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.gate-radar-spinner::before,
+.gate-radar-spinner::after {
+  content: '';
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  border: 2px solid #38bdf8;
+  animation: radarPulse 2s cubic-bezier(0.24, 0, 0.38, 1) infinite;
+}
+
+.gate-radar-spinner::after {
+  animation-delay: 1s;
+}
+
+@keyframes radarPulse {
+  0% {
+    transform: scale(0.6);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(1.4);
+    opacity: 0;
+  }
+}
+
+.gate-student-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #f1f5f9;
+  padding: 0.4rem 1rem;
+  border-radius: 9999px;
+  font-weight: 800;
+  font-size: 0.95rem;
+  color: #0f172a;
+  border: 1px solid #e2e8f0;
+  margin-bottom: 1rem;
+}
+
+.gate-waiting-status {
+  background: #fef3c7;
+  color: #b45309;
+  border: 1px solid #fde68a;
+  padding: 0.6rem 1.1rem;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+/* خيار إدخال الرمز السريع للأستاذ */
+.gate-pin-toggle {
+  margin-top: 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px dashed #e2e8f0;
+  font-size: 0.88rem;
+  color: #64748b;
+}
+
+.gate-pin-toggle button {
+  background: none;
+  border: none;
+  color: var(--gate-primary);
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: underline;
+  font-family: inherit;
+  font-size: 0.88rem;
+}
+
+.gate-pin-box {
+  display: none;
+  margin-top: 0.9rem;
+  background: #f8fafc;
+  padding: 1rem;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+}
+
+.gate-pin-box.gate-active {
+  display: block;
+}
+
+.gate-pin-inputs {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  margin: 0.75rem 0;
+}
+
+.gate-pin-digit {
+  width: 48px;
+  height: 52px;
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 900;
+  border: 2px solid #cbd5e1;
+  border-radius: 10px;
+  background: white;
+  color: var(--gate-primary-dark);
+}
+
+.gate-pin-digit:focus {
+  outline: none;
+  border-color: var(--gate-primary);
+  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+}
+
+/* حالة النجاح والقبول (SUCCESS STATE) */
+.gate-success-view {
+  display: none;
+  text-align: center;
+  padding: 1rem 0;
+  animation: gateSuccessPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes gateSuccessPop {
+  0% { transform: scale(0.85); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.gate-success-view.gate-active {
+  display: block;
+}
+
+.gate-success-icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: #dcfce7;
+  color: #16a34a;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  margin-bottom: 1.25rem;
+  border: 4px solid #bbf7d0;
+  box-shadow: 0 8px 20px rgba(22, 163, 74, 0.2);
+}
+
+/* شريط التلميذ المقبول في أعلى الموقع (STUDENT SESSION PILL) */
+.student-session-pill {
+  position: fixed;
+  top: 12px;
+  left: 16px;
+  z-index: 9999;
+  background: white;
+  border: 1px solid #cbd5e1;
+  border-radius: 9999px;
+  padding: 0.35rem 0.85rem 0.35rem 0.45rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #1e293b;
+  direction: rtl;
+  transition: all 0.2s ease;
+}
+
+.student-session-pill:hover {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+  transform: translateY(-1px);
+}
+
+.student-session-pill .student-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #22c55e;
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
+  animation: dotPulse 2s infinite;
+}
+
+@keyframes dotPulse {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.5); }
+  70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(34, 197, 94, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+}
+
+.student-session-pill .btn-logout-gate {
+  background: #fee2e2;
+  color: #dc2626;
+  border: none;
+  border-radius: 9999px;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-family: inherit;
+}
+
+.student-session-pill .btn-logout-gate:hover {
+  background: #fecaca;
+}
+
+/* زر لوحة تحكم الأستاذ العائم السري (TEACHER ACCESS BUTTON) */
+.teacher-gate-btn {
+  position: fixed;
+  bottom: 16px;
+  left: 16px;
+  z-index: 9998;
+  background: #0f172a;
+  color: #f8fafc;
+  border: 1px solid #334155;
+  border-radius: 9999px;
+  padding: 0.45rem 0.95rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  text-decoration: none;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+  transition: all 0.2s ease;
+  opacity: 0.7;
+}
+
+.teacher-gate-btn:hover {
+  opacity: 1;
+  transform: translateY(-2px);
+  background: #0284c7;
+  color: white;
+  border-color: #0284c7;
+}
