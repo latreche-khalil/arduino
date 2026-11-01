@@ -13,10 +13,11 @@
   const STORAGE_KEY_PIN = 'khalil_classroom_pin';
   const DEFAULT_PIN = '2026';
 
-  const MQTT_BROKER = 'wss://broker.emqx.io:8084/mqtt';
+  const MQTT_HOST = 'broker.emqx.io';
+  const MQTT_PORT = 8084;
+  const MQTT_PATH = '/mqtt';
   const TOPIC_REQUESTS = 'khalil_arduino_class/requests';
   const TOPIC_APPROVALS = 'khalil_arduino_class/approvals';
-  const TOPIC_STATUS = 'khalil_arduino_class/status';
 
   let mqttClient = null;
   let broadcastChannel = null;
@@ -429,57 +430,72 @@
     }
   }
 
-  // إعداد اتصال MQTT المباشر عبر WebSockets
+  // إعداد اتصال Paho MQTT السحابي المباشر فائق السرعة عبر WSS
   function initMqtt() {
-    if (typeof mqtt === 'undefined') {
-      console.warn('MQTT client not loaded yet, trying again shortly...');
-      setTimeout(initMqtt, 800);
+    if (typeof Paho === 'undefined' || !Paho.MQTT || !Paho.MQTT.Client) {
+      setTimeout(initMqtt, 500);
       return;
     }
 
     try {
-      const clientId = 'khalil_std_' + Math.random().toString(16).substring(2, 10);
-      mqttClient = mqtt.connect(MQTT_BROKER, {
-        clientId: clientId,
-        clean: true,
-        connectTimeout: 5000,
-        reconnectPeriod: 3000
-      });
+      const clientId = 'khalil_std_' + Math.random().toString(16).substring(2, 8);
+      mqttClient = new Paho.MQTT.Client(MQTT_HOST, MQTT_PORT, MQTT_PATH, clientId);
 
-      mqttClient.on('connect', () => {
-        // الاشتراك بقنوات الموافقات والأوامر
-        mqttClient.subscribe([TOPIC_APPROVALS, TOPIC_STATUS], (err) => {
-          if (!err) {
-            // إعادة إرسال الطلب إذا كان التلميذ بانتظار الموافقة
+      mqttClient.onConnectionLost = (resp) => {
+        console.warn('MQTT connection lost:', resp ? resp.errorMessage : '');
+        setTimeout(connectMqtt, 3000);
+      };
+
+      mqttClient.onMessageArrived = (msg) => {
+        try {
+          const payload = JSON.parse(msg.payloadString);
+          handleIncomingMessage(payload);
+        } catch (e) {}
+      };
+
+      connectMqtt();
+    } catch (e) {
+      console.warn('MQTT Init error:', e);
+    }
+  }
+
+  function connectMqtt() {
+    if (!mqttClient) return;
+    try {
+      mqttClient.connect({
+        useSSL: true,
+        timeout: 5,
+        keepAliveInterval: 30,
+        cleanSession: true,
+        onSuccess: () => {
+          try {
+            mqttClient.subscribe(TOPIC_APPROVALS);
+            // إذا كان التلميذ بانتظار الموافقة، أعد بث طلبه فوراً
             const pendingStr = localStorage.getItem(STORAGE_KEY_PENDING);
             if (pendingStr) {
-              try {
-                const p = JSON.parse(pendingStr);
-                currentStudentId = p.id;
-                currentStudentName = p.name;
-                publishMqtt(TOPIC_REQUESTS, { type: 'student_request', student: p });
-              } catch (e) {}
+              const p = JSON.parse(pendingStr);
+              currentStudentId = p.id;
+              currentStudentName = p.name;
+              publishMqtt(TOPIC_REQUESTS, { type: 'student_request', student: p });
             }
-          }
-        });
-      });
-
-      mqttClient.on('message', (topic, message) => {
-        try {
-          const payload = JSON.parse(message.toString());
-          handleIncomingMessage(payload);
-        } catch (e) {
-          console.warn('Error parsing MQTT message:', e);
+          } catch (e) {}
+        },
+        onFailure: (err) => {
+          setTimeout(connectMqtt, 4000);
         }
       });
     } catch (e) {
-      console.warn('MQTT Connection error:', e);
+      setTimeout(connectMqtt, 4000);
     }
   }
 
   function publishMqtt(topic, data) {
-    if (mqttClient && mqttClient.connected) {
-      mqttClient.publish(topic, JSON.stringify(data));
+    if (mqttClient && mqttClient.isConnected()) {
+      try {
+        const msg = new Paho.MQTT.Message(JSON.stringify(data));
+        msg.destinationName = topic;
+        mqttClient.send(msg);
+      } catch (e) {}
     }
   }
 

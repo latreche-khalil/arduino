@@ -700,11 +700,12 @@
       const STORAGE_CLASS_DATA = 'khalil_classroom_data';
       const ADMIN_PIN = '142005'; // الرمز السري للأستاذ
 
-      // إعدادات MQTT
-      const MQTT_BROKER = 'wss://broker.emqx.io:8084/mqtt';
+      // إعدادات Paho MQTT السحابي
+      const MQTT_HOST = 'broker.emqx.io';
+      const MQTT_PORT = 8084;
+      const MQTT_PATH = '/mqtt';
       const TOPIC_REQUESTS = 'khalil_arduino_class/requests';
       const TOPIC_APPROVALS = 'khalil_arduino_class/approvals';
-      const TOPIC_STATUS = 'khalil_arduino_class/status';
 
       let mqttClient = null;
       let broadcastChannel = null;
@@ -1026,48 +1027,69 @@
         }
       }
 
-      // إعداد اتصال MQTT السحابي
+      // إعداد اتصال Paho MQTT السحابي للوحة الأستاذ
       function initMqtt() {
-        if (typeof mqtt === 'undefined') {
-          setTimeout(initMqtt, 800);
+        if (typeof Paho === 'undefined' || !Paho.MQTT || !Paho.MQTT.Client) {
+          setTimeout(initMqtt, 500);
           return;
         }
 
         try {
-          const clientId = 'khalil_admin_' + Math.random().toString(16).substring(2, 10);
-          mqttClient = mqtt.connect(MQTT_BROKER, {
-            clientId: clientId,
-            clean: true,
-            connectTimeout: 5000,
-            reconnectPeriod: 3000
-          });
+          const clientId = 'khalil_adm_' + Math.random().toString(16).substring(2, 8);
+          mqttClient = new Paho.MQTT.Client(MQTT_HOST, MQTT_PORT, MQTT_PATH, clientId);
 
-          mqttClient.on('connect', () => {
+          mqttClient.onConnectionLost = (resp) => {
             const pillText = document.getElementById('mqttStatusText');
-            if (pillText) pillText.textContent = 'الاتصال المباشر: متصل 🟢';
+            if (pillText) pillText.textContent = 'الاتصال المباشر: جاري إعادة المحاولة 🟡';
+            setTimeout(connectMqtt, 3000);
+          };
 
-            mqttClient.subscribe(TOPIC_REQUESTS, (err) => {
-              if (err) console.error('Subscription error:', err);
-            });
-          });
-
-          mqttClient.on('error', () => {
-            const pillText = document.getElementById('mqttStatusText');
-            if (pillText) pillText.textContent = 'الاتصال المباشر: محلي فقط 🟡';
-          });
-
-          mqttClient.on('message', (topic, message) => {
+          mqttClient.onMessageArrived = (msg) => {
             try {
-              const payload = JSON.parse(message.toString());
+              const payload = JSON.parse(msg.payloadString);
               handleIncomingMessage(payload);
             } catch (e) {}
+          };
+
+          connectMqtt();
+        } catch (e) {
+          console.warn('MQTT Admin init error:', e);
+        }
+      }
+
+      function connectMqtt() {
+        if (!mqttClient) return;
+        try {
+          mqttClient.connect({
+            useSSL: true,
+            timeout: 5,
+            keepAliveInterval: 30,
+            cleanSession: true,
+            onSuccess: () => {
+              const pillText = document.getElementById('mqttStatusText');
+              if (pillText) pillText.textContent = 'الاتصال المباشر: متصل 🟢';
+              try {
+                mqttClient.subscribe(TOPIC_REQUESTS);
+              } catch (e) {}
+            },
+            onFailure: (err) => {
+              const pillText = document.getElementById('mqttStatusText');
+              if (pillText) pillText.textContent = 'الاتصال المباشر: محلي فقط 🟡';
+              setTimeout(connectMqtt, 4000);
+            }
           });
-        } catch (e) {}
+        } catch (e) {
+          setTimeout(connectMqtt, 4000);
+        }
       }
 
       function publishMqtt(topic, data) {
-        if (mqttClient && mqttClient.connected) {
-          mqttClient.publish(topic, JSON.stringify(data));
+        if (mqttClient && mqttClient.isConnected()) {
+          try {
+            const msg = new Paho.MQTT.Message(JSON.stringify(data));
+            msg.destinationName = topic;
+            mqttClient.send(msg);
+          } catch (e) {}
         }
       }
 
