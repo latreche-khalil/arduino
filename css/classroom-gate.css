@@ -441,3 +441,53 @@
   border-color: #0284c7;
 }
 
+
+/* تحسينات التجاوب لشاشات الهواتف */
+@media (max-width: 600px) {
+  .classroom-gate-overlay {
+    padding: 0.75rem;
+  }
+  .classroom-gate-card {
+    padding: 1.5rem 1.15rem;
+    border-radius: 20px;
+    max-width: 100%;
+  }
+  .gate-header-icon {
+    width: 64px;
+    height: 64px;
+    margin-bottom: 0.9rem;
+  }
+  .gate-title {
+    font-size: 1.35rem;
+  }
+  .gate-subtitle {
+    font-size: 0.88rem;
+    margin-bottom: 1.25rem;
+  }
+  .gate-input {
+    padding: 0.75rem 0.95rem;
+    font-size: 0.95rem;
+  }
+  .gate-submit-btn {
+    padding: 0.85rem 1.2rem;
+    font-size: 0.98rem;
+  }
+  .gate-radar-spinner {
+    width: 70px;
+    height: 70px;
+    margin-bottom: 1rem;
+  }
+  .student-session-pill {
+    top: 8px;
+    left: 8px;
+    padding: 0.25rem 0.65rem;
+    font-size: 0.78rem;
+    max-width: calc(100vw - 16px);
+  }
+  .teacher-gate-btn {
+    bottom: 10px;
+    left: 10px;
+    padding: 0.35rem 0.75rem;
+    font-size: 0.75rem;
+  }
+}

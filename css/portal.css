@@ -361,3 +361,142 @@
   padding: 2rem;
   margin-bottom: 4rem;
 }
+
+/* ==========================================================================
+   تحسينات التجاوب الشاملة مع مختلف الشاشات والهواتف (PORTAL RESPONSIVE)
+   ========================================================================== */
+
+/* شبكة البطاقات المميزة للأسبوعين */
+.portal-featured-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  max-width: 980px;
+  margin: 0 auto 2.5rem;
+  text-align: right;
+}
+
+/* بطاقة المشرف والمدرب */
+.instructor-showcase-card {
+  max-width: 920px;
+  margin: 0 auto;
+  background: white;
+  border-radius: var(--radius-2xl);
+  border: 2px solid var(--border-subtle);
+  padding: 2.5rem;
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  align-items: center;
+  gap: 2.5rem;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 900px) {
+  .portal-hero {
+    padding: 2.75rem 0 2rem;
+  }
+  .portal-hero h1 {
+    font-size: clamp(1.75rem, 5.5vw, 2.5rem);
+    line-height: 1.35;
+  }
+  .portal-hero p {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    margin-bottom: 1.75rem;
+    padding: 0 0.5rem;
+  }
+  .portal-featured-grid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+    margin-bottom: 2rem;
+  }
+  .projects-curriculum-grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+  .portal-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 1rem;
+    gap: 0.75rem;
+    margin: 1.5rem 0 1.25rem;
+  }
+  .portal-filters-group {
+    width: 100%;
+    overflow-x: auto;
+    white-space: nowrap;
+    padding-bottom: 0.4rem;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .portal-filters-group::-webkit-scrollbar {
+    display: none;
+  }
+  .btn-filter-portal {
+    flex-shrink: 0;
+    font-size: 0.85rem;
+    padding: 0.4rem 0.9rem;
+  }
+  .portal-stats-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    padding-top: 1rem;
+    margin-top: 1.5rem;
+  }
+  .portal-stat-item {
+    padding: 0.6rem 0.85rem;
+    gap: 0.6rem;
+  }
+  .portal-stat-icon {
+    font-size: 1.35rem;
+  }
+  .portal-stat-info h5 {
+    font-size: 1rem;
+  }
+  .portal-stat-info p {
+    font-size: 0.75rem;
+  }
+  .instructor-showcase-card {
+    padding: 1.75rem 1.25rem;
+    gap: 1.5rem;
+    text-align: center;
+  }
+  .instructor-showcase-card img {
+    width: 130px !important;
+    height: 130px !important;
+  }
+  .instructor-showcase-card .section-tag {
+    margin: 0 auto 0.6rem;
+  }
+  .instructor-showcase-card h3 {
+    font-size: 1.5rem !important;
+  }
+  .instructor-showcase-card > div:last-child {
+    text-align: center !important;
+  }
+  .instructor-showcase-card div[style*="display: flex"] {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .portal-hero {
+    padding: 2rem 0 1.5rem;
+  }
+  .portal-stats-row {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+  }
+  .portal-stat-item {
+    padding: 0.5rem 0.6rem;
+    border-radius: var(--radius-sm);
+  }
+  .curriculum-card-media {
+    height: 180px;
+  }
+  .curriculum-card-body {
+    padding: 1.25rem;
+  }
+}
