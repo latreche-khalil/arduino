@@ -839,15 +839,23 @@
         localStorage.setItem('khalil_classroom_pin', classroom.pin);
       }
 
-      // التحقق من تسجيل دخول الأستاذ
+      // التحقق الصارم من تسجيل دخول الأستاذ (جلسة التبويب الحالية فقط)
       function checkAdminAuth() {
         const overlay = document.getElementById('adminAuthOverlay');
-        const isAuth = sessionStorage.getItem(STORAGE_ADMIN_AUTH) === 'yes' || localStorage.getItem(STORAGE_ADMIN_AUTH) === 'yes';
+        // مسح أي صلاحيات قديمة محفوظة في localStorage لضمان عدم تجاوز كلمة السر
+        localStorage.removeItem(STORAGE_ADMIN_AUTH);
+        
+        const isAuth = sessionStorage.getItem(STORAGE_ADMIN_AUTH) === 'yes';
 
         if (isAuth) {
           if (overlay) overlay.style.display = 'none';
         } else {
           if (overlay) overlay.style.display = 'flex';
+          const inp = document.getElementById('adminPinInput');
+          if (inp) {
+            inp.value = '';
+            setTimeout(() => inp.focus(), 200);
+          }
         }
       }
 
@@ -862,12 +870,17 @@
           form.addEventListener('submit', (e) => {
             e.preventDefault();
             const val = inp ? inp.value.trim() : '';
-            if (val === ADMIN_PIN || val === classroom.pin) {
+            // القبول فقط وحصرياً بالرمز السري للأستاذ (142005)
+            if (val === ADMIN_PIN) {
               sessionStorage.setItem(STORAGE_ADMIN_AUTH, 'yes');
-              localStorage.setItem(STORAGE_ADMIN_AUTH, 'yes');
               document.getElementById('adminAuthOverlay').style.display = 'none';
+              if (err) err.style.display = 'none';
             } else {
               if (err) err.style.display = 'block';
+              if (inp) {
+                inp.value = '';
+                inp.focus();
+              }
             }
           });
         }

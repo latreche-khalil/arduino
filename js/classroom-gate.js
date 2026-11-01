@@ -205,23 +205,36 @@
     document.body.appendChild(overlay);
 
     // إضافة زر لوحة الأستاذ الخفي في أسفل الشاشة
-    injectTeacherAdminButton();
-
+    
     // إعداد الأحداث
     setupGateEvents();
   }
 
-  // إضافة زر وصول الأستاذ للوحة التحكم
-  function injectTeacherAdminButton() {
-    if (document.getElementById('teacherGateBtn')) return;
-    const base = getAssetsBasePath();
-    const btn = document.createElement('a');
-    btn.id = 'teacherGateBtn';
-    btn.className = 'teacher-gate-btn';
-    btn.href = `${base}admin.html`;
-    btn.title = 'لوحة تحكم وإدارة الحصة للأستاذ خليل';
-    btn.innerHTML = `👨‍🏫 <span>لوحة الأستاذ</span> 🔐`;
-    document.body.appendChild(btn);
+  // إضافة اختصار سري للأستاذ خليل (النقر 3 مرات على صورته الشخصية أو Ctrl+Alt+K)
+  function setupSecretTeacherTrigger() {
+    let clicks = 0;
+    let timer = null;
+    document.addEventListener('click', (e) => {
+      const img = e.target.closest('img');
+      if (img && (img.src.includes('teacher_khalil') || (img.alt && img.alt.includes('خليل')))) {
+        clicks++;
+        clearTimeout(timer);
+        if (clicks >= 3) {
+          clicks = 0;
+          const base = getAssetsBasePath();
+          window.location.href = `${base}admin.html`;
+        } else {
+          timer = setTimeout(() => { clicks = 0; }, 1000);
+        }
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.ctrlKey && e.altKey && (e.key === 'k' || e.key === 'K' || e.key === 'ع' || e.key === 'ك')) {
+        const base = getAssetsBasePath();
+        window.location.href = `${base}admin.html`;
+      }
+    });
   }
 
   // إعداد أحداث واجهة البوابة
@@ -509,6 +522,7 @@
   // بداية تشغيل المنظومة
   function init() {
     initBroadcastChannel();
+    setupSecretTeacherTrigger();
     initMqtt();
 
     const approved = getApprovedStudent();
@@ -516,8 +530,7 @@
     if (approved) {
       // التلميذ مقبول مسبقاً، نظهر شارة الجلسة فقط ولا نحجب الشاشة
       showStudentPill(approved);
-      injectTeacherAdminButton();
-    } else {
+          } else {
       // التلميذ لم يُقبل بعد، نقفل الشاشة ونظهر نافذة البوابة
       document.body.style.overflow = 'hidden';
       injectGatekeeperUI();
